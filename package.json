@@ -1,0 +1,17 @@
+{
+  "name": "bsge",
+  "version": "1.0.0",
+  "description": "Battle Star Galactica - Ecran de jeu",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'pas encore de test'",
+    "start": "node index.js"
+  },
+  "author": "Nathan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mosca": "^2.8.3",
+    "sqlite3": "^4.0.9"
+  }
+}
