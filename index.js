@@ -11,9 +11,9 @@ server.on('clientConnected', function(client) {
     console.log('client connected', client.id);
 });
 // fired when a message is received
-server.on('published', function(packet, client) {
-    console.log('Published', packet.payload);
-});
+// server.on('published', function(packet, client) {
+//     console.log('Published', packet, packet.payload, packet.payload.toString());
+// });
 
 
 /* Init Serveur de fichier */
