@@ -7,11 +7,15 @@
 
             //var client = mqtt.connect('mqtt://127.0.0.1:1883')
             // var client = mqtt.connect('mqtt://127.0.0.1:8082', { clientId: 'mymqttId_' + Math.random() ,clean: false, protocolVersion:5 })
-            var client = mqtt.connect('ws://127.0.0.1:8082', { protocolVersion:5 })
+            //var client = mqtt.connect('ws://127.0.0.1:8082', { protocolVersion:4 })
+            var client = mqtt.connect('mqtt://127.0.0.1:8883')
             client.on('connect', function (p) {
                 console.log('connected', p);
-                client.subscribe('presence', { rh: true, rap:true, qos:0, nl:false }, function(err, granted) { 
+                client.subscribe('presence', { }, function(err, granted) { 
                     console.log('subscribe', err, granted);
+                })
+                client.subscribe('game/clients/#', { }, function(err, granted) { 
+                    console.log('game/clients : ', err, granted);
                 })
             })
             
