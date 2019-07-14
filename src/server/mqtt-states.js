@@ -10,14 +10,14 @@ class States {
         this.db = new sqlite.Database(this._path);
 
         if (mustInit)
-            this.InitDatabase();
+            this.initDatabase();
     }
 
     /**
      * initialise la Database
      * @api private
      */
-    InitDatabase() {
+    initDatabase() {
         this.db.exec(`CREATE TABLE client(
             clientId TEXT PRIMARY KEY,
             console TEXT
@@ -32,11 +32,11 @@ class States {
      * initialise la Database
      * @api public
      */
-    Clear() {
+    clear() {
         this.db.close();
         fs.unlinkSync(this._path);
         this.db = new sqlite.Database(this._path);
-        this.InitDatabase();
+        this.initDatabase();
     }
 
     getClients(callback) {

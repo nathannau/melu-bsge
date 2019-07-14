@@ -5,14 +5,34 @@
   "main": "index.js",
   "scripts": {
     "test": "echo 'pas encore de test'",
-    "start": "node index.js"
+    "start": "node index.js",
+    "build-admin": "browserify -t [ stringify ] src/admin/main.js > public/admin/index.js"
   },
   "author": "Nathan",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mosca": "^2.8.3",
     "node-pre-gyp": "^0.13.0",
-    "sqlite3": "^4.0.9"
+    "sqlite3": "^4.0.9",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "browserify": "^16.3.0",
+    "jquery": "^3.4.1",
+    "stringify": "^5.2.0"
+  },
+  "browser": {
+    "vue": "vue/dist/vue.common.js"
+  },
+  "stringify": {
+    "appliesTo": {
+      "includeExtensions": [
+        ".txt",
+        ".tmpl",
+        ".html"
+      ]
+    }
   }
 }
