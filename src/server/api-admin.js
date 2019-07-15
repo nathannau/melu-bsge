@@ -10,7 +10,7 @@ function getConfig()
     var config = {}; 
 
     try {
-        if (!fs.existsSync(CONFIG_FILE))
+        if (fs.existsSync(CONFIG_FILE))
             config = JSON.parse(fs.readFileSync(CONFIG_FILE, { 'encoding': 'utf-8' }));
     } catch { 
         mustWrite = true;
@@ -26,7 +26,7 @@ function getConfig()
     if (!config.pwd) {
         mustWrite = true;
         config.pwd = "";
-        while(config.key.length<10)
+        while(config.pwd.length<10)
             config.pwd += Math.floor(Math.random() * 36).toString(36);
     }
 
@@ -49,11 +49,21 @@ module.exports = function() {
         .use(express.json({'limit':'5120kb'}))
         .post('/login', function(req,res) {
             console.log("/login");
-//            console.log('req :', req);
+            //console.log('req :', req.params, req.headers, req.body);
 //            console.log('res : ', res);
             var config = getConfig();
-            console.log('config : ', config);
-            res.json("Hello World")
-            //jwt.sign
+
+            var auth = req.headers.authorization;
+            var val = jwt.verify(auth, config.key);
+            console.log('valid : ', val);
+
+            if (config.pwd==req.body.password)
+                res.json({ 
+                    status: "success",
+                    token: jwt.sign({rule:'admin'}, config.key)
+                });
+            else
+                res.json({ status: "error"});
+            //
         });
 }

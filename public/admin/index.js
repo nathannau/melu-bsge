@@ -22837,14 +22837,21 @@ class Api {
     _call(method, path, data, settings = {})
     {
         var headers = settings.headers || {};
-        headers.Authorization = this.token ? 'Bearer '+this.token : ''
+        console.log(this.token)
+        if (this.token)
+            headers.Authorization = 'Bearer ' + this.token
+        else
+            delete headers.Authorization;
+
+//        headers.Authorization = this.token ? 'Bearer ' + this.token : ''
 
         $.extend(settings, {
             url: path,
-            data: data,
+            data: JSON.stringify(data),
             dataType: 'json',
+            contentType: 'application/json',
             method: method,
-            headers : {}
+            headers : headers
         })
         
         $.ajax(settings);
@@ -22852,14 +22859,14 @@ class Api {
 
     login(pwd)
     {
+        var self = this;
         this._call('POST', '/api/admin/login', {
             password: pwd
         }, { 
-            success: function(a,b) {
-                console.log( 'success', a,b);
-            },
-            error: function(_,a,b) {
-                console.log( 'error', a,b);
+            success: function(data) {
+                self.token = (data.status!='success') ? null : data.token;
+
+                console.log( 'success', data);
             },
         });
 
@@ -22876,7 +22883,7 @@ class Api {
 
 module.exports = new Api();
 },{"jquery":1}],8:[function(require,module,exports){
-module.exports = "<div>\r\n    <h1>{{title}}</h1>\r\n    <div>{{message}}</div>\r\n    <button v-on:click=\"login\">Login</button>\r\n</div>\r\n";
+module.exports = "<div>\r\n    <h1>{{title}}</h1>\r\n    <div>{{message}}</div>\r\n    <button v-on:click=\"login\">Login</button>\r\n    <input v-model=\"pwd\" />\r\n</div>\r\n";
 
 },{}],9:[function(require,module,exports){
 'use strict';
@@ -22888,12 +22895,14 @@ var app = new Vue({
     el: '#app',
     data: {
         title: 'Le titre',
-        message: require('./test.txt')
+        message: require('./test.txt'),
+        pwd: 'hhj94toirw'
     },
     methods: {
         login: function() {
             //alert('login');
-            api.login('pouet');
+            //console.log(this.pwd);
+            api.login(this.pwd);
         }
     },
     template: require('./main.html')

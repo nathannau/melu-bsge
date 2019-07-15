@@ -11,14 +11,21 @@ class Api {
     _call(method, path, data, settings = {})
     {
         var headers = settings.headers || {};
-        headers.Authorization = this.token ? 'Bearer '+this.token : ''
+        console.log(this.token)
+        if (this.token)
+            headers.Authorization = 'Bearer ' + this.token
+        else
+            delete headers.Authorization;
+
+//        headers.Authorization = this.token ? 'Bearer ' + this.token : ''
 
         $.extend(settings, {
             url: path,
-            data: data,
+            data: JSON.stringify(data),
             dataType: 'json',
+            contentType: 'application/json',
             method: method,
-            headers : {}
+            headers : headers
         })
         
         $.ajax(settings);
@@ -26,14 +33,14 @@ class Api {
 
     login(pwd)
     {
+        var self = this;
         this._call('POST', '/api/admin/login', {
             password: pwd
         }, { 
-            success: function(a,b) {
-                console.log( 'success', a,b);
-            },
-            error: function(_,a,b) {
-                console.log( 'error', a,b);
+            success: function(data) {
+                self.token = (data.status!='success') ? null : data.token;
+
+                console.log( 'success', data);
             },
         });
 
