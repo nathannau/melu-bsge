@@ -12,9 +12,10 @@ var app = new Vue({
     },
     methods: {
         login: function() {
-            //alert('login');
-            //console.log(this.pwd);
             api.login(this.pwd);
+        },
+        test: function() {
+            api.test();
         }
     },
     template: require('./main.html')

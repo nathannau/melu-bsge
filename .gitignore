@@ -4,3 +4,6 @@
 !/db/.gitkeep
 
 /config-admin.json
+
+/public/admin/*
+!/public/admin/.gitkeep

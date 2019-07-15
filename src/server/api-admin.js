@@ -37,9 +37,25 @@ function getConfig()
 }
 
 function hasRule(rules) {
-    if (typeof(rules)!='Array') rules = [rules];
+    if (!Array.isArray(rules)) rules = [rules];
+    var config = getConfig();
+
     return function(req, res) {
-        res.send(401, 'Unauthorized : invalid token');
+        var parts = req.headers.authorization.split(' ');
+        if (parts.length != 2)
+            res.send(401, 'Unauthorized : Format is Authorization: Bearer [token]');
+        else if (parts[0].toLowerCase() != 'bearer')
+            res.send(401, 'Unauthorized : Format is Authorization: Bearer [token]');
+        else {
+            var token = parts[1];
+            try {
+                var payload = jwt.verify(token, config.key);
+                if (!rules.includes(payload.rule))
+                    res.send(401, 'Unauthorized : Unauthorized access');
+            } catch {
+                res.send(401, 'Unauthorized : Invalid token');
+            }
+        }
     };
 }
 
@@ -49,13 +65,7 @@ module.exports = function() {
         .use(express.json({'limit':'5120kb'}))
         .post('/login', function(req,res) {
             console.log("/login");
-            //console.log('req :', req.params, req.headers, req.body);
-//            console.log('res : ', res);
             var config = getConfig();
-
-            var auth = req.headers.authorization;
-            var val = jwt.verify(auth, config.key);
-            console.log('valid : ', val);
 
             if (config.pwd==req.body.password)
                 res.json({ 
@@ -64,6 +74,11 @@ module.exports = function() {
                 });
             else
                 res.json({ status: "error"});
-            //
+        })
+        .get('/test', hasRule('admin'), function(req,res) {
+            console.log("/test");
+            res.json({ 
+                status: "success"
+            });
         });
 }
