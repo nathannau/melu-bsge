@@ -17,15 +17,24 @@ class Api {
             delete headers.Authorization;
 //        headers.Authorization = this.token ? 'Bearer ' + this.token : ''
 
-        $.extend(settings, {
-            url: path,
-            data: JSON.stringify(data),
-            dataType: 'json',
-            contentType: 'application/json',
-            method: method,
-            headers : headers
-        })
-        
+        if (method.toUpperCase()=='GET')
+            $.extend(settings, {
+                url: path,
+                data: data,
+                dataType: 'json',
+                method: method,
+                headers : headers
+            });
+        else
+            $.extend(settings, {
+                url: path,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: 'application/json',
+                method: method,
+                headers : headers
+            })
+
         $.ajax(settings);
     }
 
@@ -44,11 +53,8 @@ class Api {
 
     test() {
         var self = this;
-        this._call('GET', '/api/admin/test', {
-            password: pwd
-        }, { 
+        this._call('GET', '/api/admin/test', { a:'aa', b:2}, {
             success: function(data) {
-                self.token = (data.status!='success') ? null : data.token;
 
                 console.log( 'success', data);
             },

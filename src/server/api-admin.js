@@ -40,20 +40,22 @@ function hasRule(rules) {
     if (!Array.isArray(rules)) rules = [rules];
     var config = getConfig();
 
-    return function(req, res) {
-        var parts = req.headers.authorization.split(' ');
+    return function(req, res, next) {
+        var parts = req.headers.authorization ? req.headers.authorization.split(' ') : [];
         if (parts.length != 2)
-            res.send(401, 'Unauthorized : Format is Authorization: Bearer [token]');
+            res.status(401).send('Unauthorized : Format is Authorization: Bearer [token]');
         else if (parts[0].toLowerCase() != 'bearer')
-            res.send(401, 'Unauthorized : Format is Authorization: Bearer [token]');
+            res.status(401).send('Unauthorized : Format is Authorization: Bearer [token]');
         else {
             var token = parts[1];
             try {
                 var payload = jwt.verify(token, config.key);
                 if (!rules.includes(payload.rule))
-                    res.send(401, 'Unauthorized : Unauthorized access');
+                    res.status(401).send('Unauthorized : Unauthorized access');
+                else
+                    next();
             } catch {
-                res.send(401, 'Unauthorized : Invalid token');
+                res.status(401).send('Unauthorized : Invalid token');
             }
         }
     };
@@ -77,6 +79,11 @@ module.exports = function() {
         })
         .get('/test', hasRule('admin'), function(req,res) {
             console.log("/test");
+            console.log("req.query : ", req.query);
+            console.log("req.body : ", req.body);
+            console.log("req.url : ", req.url);
+            console.log("req.xhr : ", req.xhr);
+            
             res.json({ 
                 status: "success"
             });
