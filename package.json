@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo 'pas encore de test'",
     "start": "node index.js",
-    "build-admin": "browserify -t [ stringify ] src/admin/main.js > public/admin/index.js"
+    "_build-admin-js": "browserify -t [ stringify ] src/admin/main.js > public/admin/index.js",
+    "_build-admin-copy": "copyfiles -f src/admin/style.css src/admin/index.html public/admin",
+    "build-admin": "npm run _build-admin-js && npm run _build-admin-copy"
   },
   "author": "Nathan",
   "license": "ISC",
@@ -20,6 +22,7 @@
   },
   "devDependencies": {
     "browserify": "^16.3.0",
+    "copyfiles": "^2.1.1",
     "jquery": "^3.4.1",
     "stringify": "^5.2.0"
   },
