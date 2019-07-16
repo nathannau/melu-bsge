@@ -65,7 +65,7 @@ module.exports = function() {
 
     return express.Router()
         .use(express.json({'limit':'5120kb'}))
-        .post('/login', function(req,res) {
+        .post('/login', function(req, res) {
             console.log("/login");
             var config = getConfig();
 
@@ -77,7 +77,31 @@ module.exports = function() {
             else
                 res.json({ status: "error"});
         })
-        .get('/test', hasRule('admin'), function(req,res) {
+        .get('/controls', function(req, res) {
+            console.log('GET /controls');
+
+            res.send('Hello World');
+        })
+        .get('/controls/:id/:ee?', function(req, res) {
+            console.log('GET /controls/:id/:ee');
+            console.log('req.params', req.params);
+
+            res.send('Hello World');
+        })
+        .post('/controls/:id', function(req, res) {
+            console.log('POST /controls/:id');
+            
+            res.send('Hello World');
+        })
+        .delete('/controls/:id', function(req, res) {
+            console.log('DELETE /controls/:id');
+            
+            res.send('Hello World');
+        })
+
+
+
+        .get('/test', hasRule('admin'), function(req, res) {
             console.log("/test");
             console.log("req.query : ", req.query);
             console.log("req.body : ", req.body);
