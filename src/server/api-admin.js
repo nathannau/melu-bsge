@@ -2,6 +2,7 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
+var gameConfig = new (require('./game-config'))('./db/game.db');
 
 const CONFIG_FILE = 'config-admin.json';
 function getConfig()
@@ -101,15 +102,19 @@ module.exports = function() {
 
 
 
-        .get('/test', hasRule('admin'), function(req, res) {
+        .get('/test', /*hasRule('admin'),*/ async function(req, res) {
             console.log("/test");
-            console.log("req.query : ", req.query);
-            console.log("req.body : ", req.body);
-            console.log("req.url : ", req.url);
-            console.log("req.xhr : ", req.xhr);
+
+            var datas = await gameConfig.export();
+            
+            // console.log("req.query : ", req.query);
+            // console.log("req.body : ", req.body);
+            // console.log("req.url : ", req.url);
+            // console.log("req.xhr : ", req.xhr);
             
             res.json({ 
-                status: "success"
+                status: "success",
+                datas: datas
             });
         });
 }
