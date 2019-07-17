@@ -18,28 +18,31 @@ class GameConfig {
      * @api private
      */
     initDatabase() {
-        this.db.exec(`CREATE TABLE controle(
-            controleId TEXT PRIMARY KEY,
-            libelle TEXT,
-            defaultValue TEXT,
-            type TEXT,
-            config TEXT
-        )`);
-        this.db.exec(`CREATE TABLE console(
-            consoleId TEXT PRIMARY KEY,
-            libelle TEXT,
-            type TEXT,
-            config TEXT
-        )`);
-        this.db.exec(`CREATE TABLE gestionnaire(
-            gestionnaireId INTEGER PRIMARY KEY,
-            libelle TEXT,
-            config TEXT
-        )`);
-
-        // this.db.run(`INSERT INTO controle(controleId, libelle, defaultValue, type, config) VALUES('controleId', 'libelle', 'defaultValue', 'type', 'config')`);
-        // this.db.run(`INSERT INTO console(consoleId, libelle, type, config) VALUES('consoleId', 'libelle', 'type', 'config')`);
-        // this.db.run(`INSERT INTO gestionnaire(libelle, config) VALUES('libelle', 'config')`);
+        this.db.serialize(()=>{
+            this.db
+                .exec(`CREATE TABLE controle(
+                    controleId TEXT PRIMARY KEY,
+                    libelle TEXT,
+                    defaultValue TEXT,
+                    type TEXT,
+                    config TEXT
+                )`)
+                .exec(`CREATE TABLE console(
+                    consoleId TEXT PRIMARY KEY,
+                    libelle TEXT,
+                    type TEXT,
+                    config TEXT
+                )`)
+                .exec(`CREATE TABLE gestionnaire(
+                    gestionnaireId INTEGER PRIMARY KEY,
+                    libelle TEXT,
+                    config TEXT
+                )`)
+                // .run(`INSERT INTO controle(controleId, libelle, defaultValue, type, config) VALUES('controleId', 'libelle', 'defaultValue', 'type', 'config')`)
+                // .run(`INSERT INTO console(consoleId, libelle, type, config) VALUES('consoleId', 'libelle', 'type', 'config')`)
+                // .run(`INSERT INTO gestionnaire(libelle, config) VALUES('libelle', 'config')`)
+            ;
+    })
     }
 
     /**
@@ -53,30 +56,32 @@ class GameConfig {
         this.initDatabase();
     }
 
-    import(data) {
+    import(datas) {
+
+        var queries = {
+            controle: `DELETE FROM controle`,
+            console: `DELETE FROM console`,
+            gestionnaire: `DELETE FROM gestionnaire`
+        };
 
     }
 
-    async export() {
+    export(callback) {
         var queries = {
-            controle: `SELECT * FROM controle`,
-            console: `SELECT * FROM console`,
-            gestionnaire: `SELECT * FROM gestionnaire`
+            controle: [`SELECT * FROM controle`, ()=>{}],
+            console: [`SELECT * FROM console`, ()=>{}],
+            gestionnaire: [`SELECT * FROM gestionnaire`, callback]
         }
         var datas = {};
 
-        for (var i in queries) {
-            console.log('i : ', i);
-            await new Promise(resolve=>{
-                console.log('query : ', queries[i]);
-                this.db.all(queries[i], (err, rows) => {
+        this.db.serialize(()=>{
+            for (let i in queries) {
+                this.db.all(queries[i][0], (err, rows) => {
                     datas[i] = rows;
-                    console.log('datas : ', datas);
-                    resolve();
+                    queries[i][1](datas);
                 });
-            });
-        }
-        return datas;
+            }
+        })
     }
 
     getClients(callback) {

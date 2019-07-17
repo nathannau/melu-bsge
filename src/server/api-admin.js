@@ -105,16 +105,11 @@ module.exports = function() {
         .get('/test', /*hasRule('admin'),*/ async function(req, res) {
             console.log("/test");
 
-            var datas = await gameConfig.export();
-            
-            // console.log("req.query : ", req.query);
-            // console.log("req.body : ", req.body);
-            // console.log("req.url : ", req.url);
-            // console.log("req.xhr : ", req.xhr);
-            
-            res.json({ 
-                status: "success",
-                datas: datas
+            gameConfig.export((datas)=>{
+                res.json({ 
+                    status: "success",
+                    datas: datas
+                });
             });
         });
 }
