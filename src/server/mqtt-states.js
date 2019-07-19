@@ -9,23 +9,34 @@ class States {
         var mustInit = !fs.existsSync(this._path);
         this.db = new sqlite.Database(this._path);
 
-        if (mustInit)
-            this.initDatabase();
+        this.initPromise = this.mustInit ? this._initDatabase() : null;
+    }
+
+    async waitInit()
+    {
+        if (this.initPromise)
+            await this.initPromise;
+        this.initPromise = null;
     }
 
     /**
      * initialise la Database
      * @api private
      */
-    initDatabase() {
-        this.db.exec(`CREATE TABLE client(
-            clientId TEXT PRIMARY KEY,
-            console TEXT
-        )`);
-        this.db.exec(`CREATE TABLE controle(
-            controleId TEXT PRIMARY KEY,
-            value TEXT
-        )`);
+    async _initDatabase() {
+        return new Promise(resolve=>{ this.db.serialize(()=>{
+            this.db
+                .exec(`CREATE TABLE client(
+                    clientId TEXT PRIMARY KEY,
+                    console TEXT
+                )`)
+                .exec(`CREATE TABLE controle(
+                    controleId TEXT PRIMARY KEY,
+                    value TEXT
+                )`)
+                .run(`SELECT 1`, ()=>{resolve();})
+            ;
+        })});
     }
 
     /**
@@ -36,21 +47,21 @@ class States {
         this.db.close();
         fs.unlinkSync(this._path);
         this.db = new sqlite.Database(this._path);
-        this.initDatabase();
+        this.initPromise = this._initDatabase();
     }
 
-    getClients(callback) {
-        this.db.all(`SELECT * FROM client`, (err, rows) => {
-            //console.log(err, rows);
-            if (callback)
-                callback(rows)
-        })
+    async getClients() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.all(`SELECT * FROM client`, (err, rows) => { resolve(rows) })
+        });
     }
 
-    setClient(clientId, consoleId) {
-        this.db.run(`REPLACE INTO client(clientId, console) VALUES(?, ?)`, [clientId, consoleId], (result, err) => {
-            //console.log(result, err);
-        })
+    async setClient(clientId, consoleId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.run(`REPLACE INTO client(clientId, console) VALUES(?, ?)`, [clientId, consoleId], (result, err) => { resolve });
+        });
     }
 
 }

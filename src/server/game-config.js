@@ -6,19 +6,25 @@ const sqlite = require('sqlite3');
 class GameConfig {
     constructor(path) {
         this._path = path
-        var mustInit = !fs.existsSync(this._path);
+        this.mustInit = !fs.existsSync(this._path);
         this.db = new sqlite.Database(this._path);
 
-        if (mustInit)
-            this.initDatabase();
+        this.initPromise = this.mustInit ? this._initDatabase() : null;
+    }
+
+    async waitInit()
+    {
+        if (this.initPromise)
+            await this.initPromise;
+        this.initPromise = null;
     }
 
     /**
      * initialise la Database
      * @api private
      */
-    initDatabase() {
-        this.db.serialize(()=>{
+    async _initDatabase() {
+        return new Promise(resolve=>{ this.db.serialize(()=>{
             this.db
                 .exec(`CREATE TABLE controle(
                     controleId TEXT PRIMARY KEY,
@@ -41,8 +47,9 @@ class GameConfig {
                 // .run(`INSERT INTO controle(controleId, libelle, defaultValue, type, config) VALUES('controleId', 'libelle', 'defaultValue', 'type', 'config')`)
                 // .run(`INSERT INTO console(consoleId, libelle, type, config) VALUES('consoleId', 'libelle', 'type', 'config')`)
                 // .run(`INSERT INTO gestionnaire(libelle, config) VALUES('libelle', 'config')`)
+                .run(`SELECT 1`, ()=>{resolve();})
             ;
-    })
+        })});
     }
 
     /**
@@ -53,49 +60,160 @@ class GameConfig {
         this.db.close();
         fs.unlinkSync(this._path);
         this.db = new sqlite.Database(this._path);
-        this.initDatabase();
+        this.initPromise = this._initDatabase();
     }
 
-    import(datas) {
-
-        var queries = {
-            controle: `DELETE FROM controle`,
-            console: `DELETE FROM console`,
-            gestionnaire: `DELETE FROM gestionnaire`
-        };
-
+    async import(datas) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            var queries = {
+                controle: { 
+                    delete: { query: `DELETE FROM controle` },
+                    insert: { query: `INSERT INTO controle (controleId, libelle, defaultValue, type, config) VALUES (?,?,?,?,?)`, args: ['controleId', 'libelle', 'defaultValue', 'type', 'config'] }
+                },
+                console: {
+                    delete: { query: `DELETE FROM console` },
+                    insert: { query: `INSERT INTO console(consoleId, libelle, type, config) VALUES (?,?,?,?)`, args: ['consoleId', 'libelle', 'type', 'config'] }
+                },
+                gestionnaire: {
+                    delete: { query: `DELETE FROM gestionnaire` },
+                    insert: { query: `INSERT INTO gestionnaire(gestionnaireId, libelle, config) VALUES (?,?,?)`, args: ['gestionnaireId', 'libelle', 'config'] }
+                }
+            };
+    
+            this.db.serialize(()=>{
+                for (let i in queries) {
+                    this.db.run(queries[i].delete.query);
+                    for (let j=0; j<datas[i].length; j++) {
+                        console.log(queries[i].insert.query, queries[i].insert.args.map(x => datas[i][j][x]));
+                        this.db.run(
+                            queries[i].insert.query, 
+                            queries[i].insert.args.map(x => datas[i][j][x]),
+                            ()=>{ }
+                        );
+                    }
+                }
+                this.db.run('SELECT 1', ()=>{ resolve(); } );
+            });
+        });
     }
-
-    export(callback) {
-        var queries = {
-            controle: [`SELECT * FROM controle`, ()=>{}],
-            console: [`SELECT * FROM console`, ()=>{}],
-            gestionnaire: [`SELECT * FROM gestionnaire`, callback]
-        }
-        var datas = {};
-
-        this.db.serialize(()=>{
-            for (let i in queries) {
-                this.db.all(queries[i][0], (err, rows) => {
-                    datas[i] = rows;
-                    queries[i][1](datas);
-                });
+    async export() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            var queries = {
+                controle: `SELECT * FROM controle`,
+                console: `SELECT * FROM console`,
+                gestionnaire: `SELECT * FROM gestionnaire`
             }
-        })
+            var datas = {};
+    
+            this.db.serialize(()=>{
+                for (let i in queries)
+                    this.db.all(queries[i], (err, rows) => { datas[i] = rows; });
+                this.db.run('SELECT 1', ()=>{ resolve(datas); } );
+            });
+        });
     }
 
-    getClients(callback) {
-        this.db.all(`SELECT * FROM client`, (err, rows) => {
-            //console.log(err, rows);
-            if (callback)
-                callback(rows)
-        })
+    // Controles
+    async getControles() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.all(`SELECT * FROM controle`, (err, rows) => { resolve(rows) });
+        });
     }
-
-    setClient(clientId, consoleId) {
-        this.db.run(`REPLACE INTO client(clientId, console) VALUES(?, ?)`, [clientId, consoleId], (result, err) => {
-            //console.log(result, err);
-        })
+    async getControle(controleId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.get(`SELECT * FROM controle WHERE controleId=?`, [controleId], (err, row) => { resolve(row) });
+        });
+    }
+    async setControle(controleId, values = {}) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            var flds = [ 'controleId' ], params = [ '?' ], vals = [ controleId ];
+            ['libelle', 'defaultValue', 'type', 'config'].forEach(i=>{
+                if (values[i]!=undefined) {
+                    flds.push(i);
+                    params.push('?');
+                    vals.push(values[i]);
+                }
+            });
+            this.db.run(`REPLACE INTO controle(` + flds.join(',') + `) VALUES(` + params.join(',') + `)`, vals, (result, err) => { resolve(); });
+        });
+    }
+    async deleteControle(controleId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.run(`DELETE FROM controle WHERE controleId=?`, [controleId], (result, err) => { resolve() });
+        });
+    }
+    // Consoles
+    async getConsoles() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.all(`SELECT * FROM console`, (err, rows) => { resolve(rows) });
+        });
+    }
+    async getConsole(consoleId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.get(`SELECT * FROM console WHERE consoleId=?`, [consoleId], (err, row) => { resolve(row) });
+        });
+    }
+    async setConsole(consoleId, values = {}) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            var flds = [ 'consoleId' ], params = [ '?' ], vals = [ consoleId ];
+            ['libelle', 'type', 'config'].forEach(i=>{
+                if (values[i]!=undefined) {
+                    flds.push(i);
+                    params.push('?');
+                    vals.push(values[i]);
+                }
+            });
+            this.db.run(`REPLACE INTO console(` + flds.join(',') + `) VALUES(` + params.join(',') + `)`, vals, (result, err) => { resolve(); });
+        });
+    }
+    async deleteConsole(consoleId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.run(`DELETE FROM console WHERE consoleId=?`, [consoleId], (result, err) => { resolve() });
+        });
+    }
+    // Gestionnaire
+    async getGestionnaires() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.all(`SELECT * FROM gestionnaire`, (err, rows) => { resolve(rows) });
+        });
+    }
+    async getGestionnaire(gestionnaireId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.get(`SELECT * FROM gestionnaire WHERE gestionnaireId=?`, [gestionnaireId], (err, row) => { resolve(row) });
+        });
+    }
+    async setGestionnaire(gestionnaireId, values = {}) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            values.gestionnaireId = gestionnaireId;
+            var flds = [ ], params = [ ], vals = [ ];
+            ['gestionnaireId', 'libelle', 'config'].forEach(i=>{
+                if (values[i]!=undefined) {
+                    flds.push(i);
+                    params.push('?');
+                    vals.push(values[i]);
+                }
+            });
+            this.db.run(`REPLACE INTO gestionnaire(` + flds.join(',') + `) VALUES(` + params.join(',') + `)`, vals, (result, err) => { resolve(); });
+        });
+    }
+    async deleteGestionnaire(gestionnaireId) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.run(`DELETE FROM gestionnaire WHERE gestionnaireId=?`, [gestionnaireId], (result, err) => { resolve() });
+        });
     }
 
 }

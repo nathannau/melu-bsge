@@ -66,6 +66,7 @@ module.exports = function() {
 
     return express.Router()
         .use(express.json({'limit':'5120kb'}))
+        // Login
         .post('/login', function(req, res) {
             console.log("/login");
             var config = getConfig();
@@ -78,38 +79,135 @@ module.exports = function() {
             else
                 res.json({ status: "error"});
         })
-        .get('/controls', function(req, res) {
-            console.log('GET /controls');
+        // Controles
+        .get('/controles', async function(req, res) {
+            console.log('GET /controles');
 
-            res.send('Hello World');
+            var datas = await gameConfig.getControles();
+
+            res.json({ 
+                status: "success",
+                datas: datas
+            });
         })
-        .get('/controls/:id/:ee?', function(req, res) {
-            console.log('GET /controls/:id/:ee');
-            console.log('req.params', req.params);
+        .get('/controles/:id', async function(req, res) {
+            console.log('GET /controles/:id');
 
-            res.send('Hello World');
+            var data = await gameConfig.getControle(req.params.id);
+            if (data==undefined)
+                res.status(404).send('controle not found');
+            else
+                res.json({ 
+                    status: "success",
+                    datas: data
+                });
         })
-        .post('/controls/:id', function(req, res) {
-            console.log('POST /controls/:id');
-            
-            res.send('Hello World');
+        .post('/controles/:id', async function(req, res) {
+            console.log('POST /controles/:id');
+
+            await gameConfig.setControle(req.params.id, req.body);
+            res.json({ 
+                status: "success",
+            });
         })
-        .delete('/controls/:id', function(req, res) {
-            console.log('DELETE /controls/:id');
-            
-            res.send('Hello World');
+        .delete('/controles/:id', async function(req, res) {
+            console.log('DELETE /controles/:id');
+
+            await gameConfig.deleteControle(req.params.id);
+            res.json({ 
+                status: "success",
+            });
+        })
+        // Consoles
+        .get('/consoles', async function(req, res) {
+            console.log('GET /consoles');
+
+            var datas = await gameConfig.getConsoles();
+
+            res.json({ 
+                status: "success",
+                datas: datas
+            });
+        })
+        .get('/consoles/:id', async function(req, res) {
+            console.log('GET /consoles/:id');
+
+            var data = await gameConfig.getConsole(req.params.id);
+            if (data==undefined)
+                res.status(404).send('console not found');
+            else
+                res.json({ 
+                    status: "success",
+                    datas: data
+                });
+        })
+        .post('/consoles/:id', async function(req, res) {
+            console.log('POST /consoles/:id');
+
+            await gameConfig.setConsole(req.params.id, req.body);
+            res.json({ 
+                status: "success",
+            });
+        })
+        .delete('/consoles/:id', async function(req, res) {
+            console.log('DELETE /consoles/:id');
+
+            await gameConfig.deleteConsole(req.params.id);
+            res.json({ 
+                status: "success",
+            });
+        })
+        // Gestionnaire
+        .get('/gestionnaires', async function(req, res) {
+            console.log('GET /gestionnaires');
+
+            var datas = await gameConfig.getGestionnaires();
+
+            res.json({ 
+                status: "success",
+                datas: datas
+            });
+        })
+        .get('/gestionnaires/:id', async function(req, res) {
+            console.log('GET /gestionnaires/:id');
+
+            var data = await gameConfig.getGestionnaire(req.params.id);
+            if (data==undefined)
+                res.status(404).send('gestionnaire not found');
+            else
+                res.json({ 
+                    status: "success",
+                    datas: data
+                });
+        })
+        .post('/gestionnaires/:id?', async function(req, res) {
+            console.log('POST /gestionnaires/:id');
+
+            await gameConfig.setGestionnaire(req.params.id, req.body);
+            res.json({ 
+                status: "success",
+            });
+        })
+        .delete('/gestionnaires/:id', async function(req, res) {
+            console.log('DELETE /gestionnaires/:id');
+
+            await gameConfig.deleteGestionnaire(req.params.id);
+            res.json({ 
+                status: "success",
+            });
         })
 
 
-
+        // Test
         .get('/test', /*hasRule('admin'),*/ async function(req, res) {
             console.log("/test");
 
-            gameConfig.export((datas)=>{
-                res.json({ 
-                    status: "success",
-                    datas: datas
-                });
+            var datas = await gameConfig.export();
+            gameConfig.import(datas);
+
+            res.json({ 
+                status: "success",
+                datas: datas
             });
         });
 }

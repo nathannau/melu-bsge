@@ -2,7 +2,7 @@
 
 module.exports = function(server, state)
 {
-    state.getClients((clients)=>{
+    state.getClients().then((clients)=>{
         clients.forEach((client)=>{
             server.publish({
                 topic: `game/clients/${client.clientId}`,
@@ -13,9 +13,8 @@ module.exports = function(server, state)
         });
     });
     
-    
     server.on('clientConnected', function(client) {
-        state.getClients((clients)=> {
+        state.getClients().then((clients)=> {
             if (clients[client.id] == undefined)
             {
                 state.setClient(client.id, null);
