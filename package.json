@@ -24,6 +24,7 @@
     "browserify": "^16.3.0",
     "copyfiles": "^2.1.1",
     "jquery": "^3.4.1",
+    "querystringify": "^2.1.1",
     "stringify": "^5.2.0"
   },
   "browser": {

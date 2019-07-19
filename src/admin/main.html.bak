@@ -1,0 +1,8 @@
+<div>
+    <h1>{{title}}</h1>
+    <div>{{message}}</div>
+    <input v-model="pwd" />
+    <button v-on:click="login">Login</button>
+    <br/>
+    <button v-on:click="test">Test</button>
+</div>
