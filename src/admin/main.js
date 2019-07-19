@@ -6,7 +6,7 @@ var api = require('./Api');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 const Home = { template: '<p>Home</p>' };
-const Login = { template: '<p>Login</p>' };
+const Login = require('./login'); // { template: '<p>Login</p>' };
 const Controles = { template: '<p>Controles</p>' };
 
 Vue.component('main-menu', { 
@@ -26,9 +26,6 @@ const routes = {
 var app = new Vue({
     el: '#app',
     data: {
-        //title: 'Le titre',
-        //message: require('./test.txt'),
-        //pwd: 'hhj94toirw',
         currentUrl: window.location.hash,
         currentHash: '',
         currentArgs: {}

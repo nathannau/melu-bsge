@@ -48,5 +48,13 @@ nav > ul li {
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    
 }
+
+/* Login */
+.login {
+
+
+}
+.login .error {
+    color: #aa0000
+ }

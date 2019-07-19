@@ -1,0 +1,5 @@
+<div class="login">
+    <input v-model="pwd" />
+    <button v-on:click="connect">Login</button>
+    <div v-if="error" class="error">{{error}}</div>
+</div>

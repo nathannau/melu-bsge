@@ -10,7 +10,7 @@ class Api {
 
     _call(method, path, data, settings = {}) {
         var headers = settings.headers || {};
-        console.log(this.token)
+        //console.log(this.token)
         if (this.token)
             headers.Authorization = 'Bearer ' + this.token
         else
@@ -38,16 +38,22 @@ class Api {
         $.ajax(settings);
     }
 
-    login(pwd) {
-        var self = this;
-        this._call('POST', '/api/admin/login', {
-            password: pwd
-        }, { 
-            success: function(data) {
-                self.token = (data.status!='success') ? null : data.token;
+    hasToken() {
+        return !!this.token;
+    }
 
-                console.log( 'success', data);
-            },
+    async login(pwd) {
+        return new Promise((resolve)=>{
+            var self = this;
+            this._call('POST', '/api/admin/login', {
+                password: pwd
+            }, { 
+                success: function(data) {
+                    self.token = (data.status!='success') ? null : data.token;
+                    resolve(!!self.token);
+                },
+            });
+
         });
     }
 
