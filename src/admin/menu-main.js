@@ -17,7 +17,7 @@ module.exports = Vue.component('menu-main', {
     props: {
         currentRoute: String,
     },
-    data: ()=>{ return {
+    data: function() { return {
         items: items
     }}
 });

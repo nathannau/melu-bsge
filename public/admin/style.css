@@ -62,5 +62,16 @@ nav > ul li {
 
 }
 .login .error {
-    color: #aa0000
- }
+    color: #aa0000;
+}
+
+/* Controles */
+.controles .controle {
+    margin-bottom: 20px;
+}
+.controles input.error {
+    background: #ffaaaa;
+}
+.controles div.error {
+    color: #aa0000;
+}

@@ -70,6 +70,9 @@ class Api {
     async setControle(id, controle) {
         await this._asyncCall('POST', `/api/admin/controles/${id}`, controle);
     }
+    async removeControle(id) {
+        await this._asyncCall('DELETE', `/api/admin/controles/${id}`);
+    }
 
     async getConsoles() {
         var rep = await this._asyncCall('GET', `/api/admin/consoles`);
@@ -86,6 +89,9 @@ class Api {
     async setConsole(id, console) {
         await this._asyncCall('POST', `/api/admin/consoles/${id}`, console);
     }
+    async removeConsole(id) {
+        await this._asyncCall('DELETE', `/api/admin/consoles/${id}`);
+    }
 
     async getGestionnaires() {
         var rep = await this._asyncCall('GET', `/api/admin/gestionnaires`);
@@ -101,6 +107,9 @@ class Api {
     }
     async setGestionnaire(id, gestionnaire) {
         await this._asyncCall('POST', `/api/admin/gestionnaires/${id}`, gestionnaire);
+    }
+    async removeGestionnaire(id) {
+        await this._asyncCall('DELETE', `/api/admin/gestionnaires/${id}`);
     }
 
     // test() {
