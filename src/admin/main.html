@@ -1,5 +1,5 @@
 <div id="app">
     <header>La mélusine</header>
-    <nav><main-menu></main-menu></nav>
+    <nav><menu-main :currentRoute="currentHash"></menu-main></nav>
     <main><component v-bind:is="mainView "></component></main>
 </div>

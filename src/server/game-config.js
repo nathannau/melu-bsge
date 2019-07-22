@@ -206,7 +206,9 @@ class GameConfig {
                     vals.push(values[i]);
                 }
             });
-            this.db.run(`REPLACE INTO gestionnaire(` + flds.join(',') + `) VALUES(` + params.join(',') + `)`, vals, (result, err) => { resolve(); });
+            this.db.run(`REPLACE INTO gestionnaire(` + flds.join(',') + `) VALUES(` + params.join(',') + `)`, vals, (result, err) => { console.log(result, err, this); resolve(); });
+            if (!gestionnaireId)
+                this.db.get(`SELECT last_insert_rowid()`, (result, err) => { console.log(result, err, this); resolve(); });
         });
     }
     async deleteGestionnaire(gestionnaireId) {

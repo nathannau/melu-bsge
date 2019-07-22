@@ -10,11 +10,9 @@ module.exports = Vue.component('login', {
     }; },
     methods: {
         connect: async function() {
-            console.log('connect !')
             var succes = await api.login(this.pwd);
-            console.log('succes')
             this.error = succes ? false : "Mot de passe invalid"
-            console.log(this.error)
+            if (succes) window.location = '#home'
         },
 
     },

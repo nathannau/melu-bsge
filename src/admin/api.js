@@ -10,7 +10,7 @@ class Api {
 
     _call(method, path, data, settings = {}) {
         var headers = settings.headers || {};
-        //console.log(this.token)
+
         if (this.token)
             headers.Authorization = 'Bearer ' + this.token
         else
@@ -37,41 +37,58 @@ class Api {
 
         $.ajax(settings);
     }
+    _asyncCall(method, path, data, settings = {}) {
+        return new Promise((resolve, reject)=>{
+            settings.success = resolve;
+            settings.error = reject;
+            this._call(method, path, data, settings);
+        });
+    }
 
     hasToken() {
         return !!this.token;
     }
 
     async login(pwd) {
-        return new Promise((resolve)=>{
-            var self = this;
-            this._call('POST', '/api/admin/login', {
-                password: pwd
-            }, { 
-                success: function(data) {
-                    self.token = (data.status!='success') ? null : data.token;
-                    resolve(!!self.token);
-                },
-            });
-
-        });
+        var data = await this._asyncCall('POST', `/api/admin/login`, { password: pwd });
+        this.token = (data.status!='success') ? null : data.token;
+        return !!this.token;
     }
 
-    test() {
-        var self = this;
-        this._call('GET', '/api/admin/test', { a:'aa', b:2}, {
-            success: function(data) {
-
-                console.log( 'success', data);
-            },
-        });
-
+    async getControles() {
+        var datas = await this._asyncCall('GET', `/api/admin/controles`);
+        return datas
+    }
+    
+    async getControle(id) {
+        var data = await this._asyncCall('GET', `/api/admin/controles/${id}`);
+        return data
+    }
+    
+    async addControle(data) {
+        var id = await this._asyncCall('POST', `/api/admin/controles`, data);
+        return id
+    }
+    
+    async setControle(id, data) {
+        await this._asyncCall('POST', `/api/admin/controles/${id}`, data);
     }
 
-    display() {
-        alert('cool !');
-        console.log($);
-    }
+    // test() {
+    //     var self = this;
+    //     this._call('GET', '/api/admin/test', { a:'aa', b:2}, {
+    //         success: function(data) {
+
+    //             console.log( 'success', data);
+    //         },
+    //     });
+
+    // }
+
+    // display() {
+    //     alert('cool !');
+    //     console.log($);
+    // }
 
 
 }

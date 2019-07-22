@@ -1,0 +1,5 @@
+<ul class="menu-main">
+    <li v-for="item in items">
+        <a :href="'#' + item.route" :class="{active:item.route==currentRoute}">{{ item.libelle }}</a>
+    </li>
+</ul>

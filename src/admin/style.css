@@ -50,6 +50,12 @@ nav > ul li {
     font-size: 20px;
 }
 
+/* Menu Main */
+.menu-main a.active {
+    font-weight: bold;
+    text-decoration: none;
+}
+
 /* Login */
 .login {
 

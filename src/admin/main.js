@@ -6,16 +6,10 @@ var api = require('./Api');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 const Home = { template: '<p>Home</p>' };
-const Login = require('./login'); // { template: '<p>Login</p>' };
-const Controles = { template: '<p>Controles</p>' };
+const Login = require('./login');
+const Controles = require('./controles');
 
-Vue.component('main-menu', { 
-    template: `<ul>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#controle">Controles</a></li>
-    <li><a href="#login">Login</a></li>
-</ul>` }
-);
+var menuMain = require('./menu-main');
 
 const routes = {
     '': Home,
