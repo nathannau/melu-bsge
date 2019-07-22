@@ -1,3 +1,11 @@
 <div class="controles">
-    Controles
+    <h1>Controles</h1>
+    <div v-for="item in items" class="controle">
+        <label>Type : <select v-model="item.type">
+            <option v-for="(info,type) in types" v-bind:value="type">{{ info.label }}</option>
+        </select></label>
+        <component v-bind:is="getComponent(item.type)"></component>
+    </div>
+    <button v-on:click="add">Nouveau</button><br />
+    <button v-on:click="save">Enregistrer</button>
 </div>

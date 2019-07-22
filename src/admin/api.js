@@ -56,22 +56,51 @@ class Api {
     }
 
     async getControles() {
-        var datas = await this._asyncCall('GET', `/api/admin/controles`);
-        return datas
+        var rep = await this._asyncCall('GET', `/api/admin/controles`);
+        return rep.datas
     }
-    
     async getControle(id) {
-        var data = await this._asyncCall('GET', `/api/admin/controles/${id}`);
-        return data
+        var rep = await this._asyncCall('GET', `/api/admin/controles/${id}`);
+        return rep.data
     }
-    
-    async addControle(data) {
-        var id = await this._asyncCall('POST', `/api/admin/controles`, data);
-        return id
+    // async addControle(controle) {
+    //     var rep = await this._asyncCall('POST', `/api/admin/controles`, controle);
+    //     return rep.id
+    // }
+    async setControle(id, controle) {
+        await this._asyncCall('POST', `/api/admin/controles/${id}`, controle);
     }
-    
-    async setControle(id, data) {
-        await this._asyncCall('POST', `/api/admin/controles/${id}`, data);
+
+    async getConsoles() {
+        var rep = await this._asyncCall('GET', `/api/admin/consoles`);
+        return rep.datas
+    }
+    async getConsole(id) {
+        var rep = await this._asyncCall('GET', `/api/admin/consoles/${id}`);
+        return rep.data
+    }
+    // async addConsole(console) {
+    //     var rep = await this._asyncCall('POST', `/api/admin/consoles`, console);
+    //     return rep.id
+    // }
+    async setConsole(id, console) {
+        await this._asyncCall('POST', `/api/admin/consoles/${id}`, console);
+    }
+
+    async getGestionnaires() {
+        var rep = await this._asyncCall('GET', `/api/admin/gestionnaires`);
+        return rep.datas
+    }
+    async getGestionnaire(id) {
+        var rep = await this._asyncCall('GET', `/api/admin/gestionnaires/${id}`);
+        return rep.data
+    }
+    async addGestionnaire(gestionnaire) {
+        var rep = await this._asyncCall('POST', `/api/admin/gestionnaires`, gestionnaire);
+        return rep.id
+    }
+    async setGestionnaire(id, gestionnaire) {
+        await this._asyncCall('POST', `/api/admin/gestionnaires/${id}`, gestionnaire);
     }
 
     // test() {

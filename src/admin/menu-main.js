@@ -1,8 +1,8 @@
 'use strict';
 
 var Vue = require('vue');
-var qs = require('querystringify');
-var api = require('./Api');
+// var qs = require('querystringify');
+// var api = require('./Api');
 
 const items = [
     { route: 'home',         libelle: 'Home'},
