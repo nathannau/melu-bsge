@@ -22,7 +22,16 @@ module.exports = Vue.component('controles', {
         this.items = await api.getControles();
     },
     methods: {
-        add: function() { console.log('controles.add')},
+        add: function() { 
+            console.log('controles.add'); 
+            this.items.push({
+                controleId:	null,
+                libelle: "Nouv Controle",
+                defaultValue: null,
+                type: "numeric",
+                config:"{}",
+            });
+        },
         save: function() { console.log('controles.save')},
         getComponent: function(type) { return types[type] ? types[type].component : invalidType; }
     }
