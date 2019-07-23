@@ -56,6 +56,29 @@ nav > ul li {
     text-decoration: none;
 }
 
+/* overlay */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    height: 100%;
+    display:none;
+    justify-content: center;
+    align-items: center;
+}
+.overlay.active {
+    display:flex;
+}
+.overlay .alert {
+    background: #ffffff;
+    border: 1px solid #000000;
+    padding: 15px;
+    max-width: 50%;
+}
+
+
 /* Login */
 .login {
 

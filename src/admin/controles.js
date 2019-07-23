@@ -12,7 +12,9 @@ module.exports = Vue.component('controles', {
         removed: [],
     }},
     mounted: async function() {
+        this.$showLoading();
         this.items = await api.getControles();
+        this.$hideLoading();
     },
     methods: {
         getErrorIdInDouble: function(item) {

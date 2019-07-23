@@ -85,7 +85,6 @@ module.exports = function() {
             console.log('GET /controles');
 
             var datas = await gameConfig.getControles();
-
             res.json({ 
                 status: "success",
                 datas: datas

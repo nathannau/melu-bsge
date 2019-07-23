@@ -10,6 +10,7 @@ const Login = require('./login');
 const Controles = require('./controles');
 
 var menuMain = require('./menu-main');
+var overlay = require('./overlay');
 
 const routes = {
     '': Home,
