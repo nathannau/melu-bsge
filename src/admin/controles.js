@@ -16,11 +16,21 @@ module.exports = Vue.component('controles', {
         this.items = await api.getControles();
         this.$hideLoading();
     },
+    computed: {
+        hasOneError: function() {
+            return !this.items.every(item=>{return !this.hasError(item); });
+        },
+    },
     methods: {
-        getErrorIdInDouble: function(item) {
+        hasErrorIdInDouble: function(item) {
             return !item.controleId && 
                 this.items.find((el)=>{ return el!=item && 
                     (el.controleId || el.newControleId)==item.newControleId; });
+        },
+        hasError: function(item) {
+            if (!item.controleId)
+                return !item.newControleId || this.hasErrorIdInDouble(item);
+            return false;
         },
         add: function() {
             this.items.push({
@@ -38,6 +48,7 @@ module.exports = Vue.component('controles', {
                 this.removed.push(item.controleId);
         },
         save: async function() { 
+            this.$showLoading();
             this.items.forEach(async item => {
                 await api.setControle(item.controleId || item.newControleId, item);
                 item.controleId = item.controleId || item.newControleId;
@@ -45,6 +56,8 @@ module.exports = Vue.component('controles', {
             this.removed.forEach(async key => {
                 await api.removeControle(key);
             });
+            this.$hideLoading();
+            this.$openAlert({message:'Controles sauvegardés', timeout:2000});
         },
     }
 });

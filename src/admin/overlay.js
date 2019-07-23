@@ -57,13 +57,14 @@ module.exports = Vue.component('overlay', {
             var i = 0;
             var toAnim = function(p) { if (p>=10) p=19-p; return "0".padStart(p+1, '-').padEnd(10, '-')}
             //this.$refs.anim.innerText = toAnim(i);
-            this.anim = setInterval(()=>{ 
+            this.timerAnim = setInterval(()=>{ 
                 i=(i+1)%20; 
                 this.$refs.anim.innerText = toAnim(i);
             }, 100);
         },
         hideLoading: function() {
-            clearInterval(this.anim);
+            clearInterval(this.timerAnim);
+            this.timerAnim = null;
             this.loading = false;
         },
         openAlert: function(options) {
@@ -71,11 +72,20 @@ module.exports = Vue.component('overlay', {
             this.alert = {
                 message: options.message,
                 title: options.title,
-                timeout: options.timeout,
+                onclose: options.onclose,
             };
+            if (options.timeout)
+                this.timerAlert = setTimeout(this.closeAlert, options.timeout);
+
         },
         closeAlert: function() {
+            clearTimeout(this.timerAlert);
+            this.timerAlert = null;
+
+            if (this.alert == null) return;
+            var cb = this.alert.onclose;
             this.alert = null;
+            if (cb) cb();
         },
     }
 });

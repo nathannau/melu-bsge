@@ -1,4 +1,4 @@
 <div class="overlay" v-bind:class="{ active: loading || alert }">
     <div v-if="loading" class="loading">Chargement <span ref="anim"></span></div>
-    <div v-if="alert" class="alert">{{ alert.message }}</div>
+    <div v-if="alert" class="alert" v-on:click="closeAlert">{{ alert.message }}</div>
 </div>

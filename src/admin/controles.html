@@ -3,9 +3,9 @@
     <div v-for="(item,index) in items" class="controle">
         <controle v-bind:value="item" 
             v-on:input="items.splice(index,1,$event)" 
-            v-bind:errorIdInDouble="getErrorIdInDouble(item)"/>
+            v-bind:errorIdInDouble="hasErrorIdInDouble(item)"/>
         <button v-on:click="remove(index)">Supprimer</button>
     </div>
     <button v-on:click="add">Nouveau</button><br />
-    <button v-on:click="save">Enregistrer</button>
+    <button v-on:click="save" v-bind:disabled="hasOneError">Enregistrer</button>
 </div>

@@ -12,7 +12,12 @@ module.exports = Vue.component('login', {
         connect: async function() {
             var succes = await api.login(this.pwd);
             this.error = succes ? false : "Mot de passe invalid"
-            if (succes) window.location = '#home'
+            if (succes)
+                this.$openAlert( {
+                    message:'Connexion réussi', 
+                    timeout:2000, 
+                    onclose:function() { window.location = '#home'; },
+                });
         },
 
     },
