@@ -1,4 +1,15 @@
-<div class="overlay" v-bind:class="{ active: loading || alert }">
+<div class="overlay" v-bind:class="{ active: loading || alert || ask }">
     <div v-if="loading" class="loading">Chargement <span ref="anim"></span></div>
-    <div v-if="alert" class="alert" v-on:click="closeAlert">{{ alert.message }}</div>
+    <div v-if="alert" class="alert" v-on:click="closeAlert">
+        <div v-if="alert.title" class="title">{{ alert.title }}</div>
+        {{ alert.message }}
+    </div>
+    <div v-if="ask" class="ask">
+            <div v-if="ask.title">{{ ask.title }}</div>
+            {{ ask.message }}
+            <div class="buttons">
+                <button v-for="(text, key) in ask.buttons" 
+                    v-on:click="askButtonClick(key)">{{ text }}</button>
+            </div>
+    </div>
 </div>

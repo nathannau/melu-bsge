@@ -43,9 +43,18 @@ module.exports = Vue.component('controles', {
             });
         },
         remove: function(index) {
-            var item = this.items.splice(index,1)[0];
-            if (item.controleId)
-                this.removed.push(item.controleId);
+            this.$openAsk({
+                title: "Supprimer",
+                message: "Voulez vous supprimer ce controle ?",
+                buttons: { no: "Non", yes: "Oui"},
+                onselect: (key) => {
+                    if (key=="yes") {
+                        var item = this.items.splice(index,1)[0];
+                        if (item.controleId)
+                            this.removed.push(item.controleId);
+                    }
+                }
+            })
         },
         save: async function() { 
             this.$showLoading();
@@ -57,7 +66,10 @@ module.exports = Vue.component('controles', {
                 await api.removeControle(key);
             });
             this.$hideLoading();
-            this.$openAlert({message:'Controles sauvegardés', timeout:2000});
+            this.$openAlert({
+                title:'Sauvegarde', 
+                message:'Controles sauvegardés avec succès', 
+                timeout:2000});
         },
     }
 });

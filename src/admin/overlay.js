@@ -35,6 +35,11 @@ class OverlayPlugin {
                 overlay.closeAlert();
             });
         }
+        Vue.prototype.$openAsk = function (options) {
+            overlays.forEach(overlay=>{
+                overlay.openAsk(options);
+            });
+        }
     }
 }
 Vue.use(OverlayPlugin);
@@ -46,6 +51,7 @@ module.exports = Vue.component('overlay', {
     data: function() { return {
         loading: false,
         alert: null,
+        ask: null,
     }},
     mounted: function() {
         Vue.registreOverlay(this);
@@ -87,6 +93,20 @@ module.exports = Vue.component('overlay', {
             this.alert = null;
             if (cb) cb();
         },
+        openAsk: function(options) {
+            this.ask = {
+                message: options.message,
+                title: options.title,
+                buttons: options.buttons,
+                onselect: options.onselect,
+            };
+        },
+        askButtonClick: function(key) {
+            if (!this.ask) return;
+            var cb = this.ask.onselect;
+            this.ask = null;
+            if (cb) cb(key);
+        }
     }
 });
 
