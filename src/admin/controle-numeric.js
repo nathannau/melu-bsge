@@ -29,14 +29,6 @@ module.exports = Vue.component('controle-numeric', {
     computed: {
         precision: function() { return Math.pow(10, -this.item.decimal); }
     },
-    methods: {
-        changeDefaultValue: function(value) {
-            this.value = value;
-        },  
-        changeItemAttr: function(attr, value) {
-            Vue.set(this.item, attr, value);
-        }      
-    },
     watch: {
         item: { deep: true, handler: function(value) { 
             this.$emit('update:config', JSON.stringify(value));

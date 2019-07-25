@@ -21,16 +21,11 @@ module.exports = Vue.component('controle-string', {
             value: this.defaultValue,
         };
     },
-    methods: {
-        changeItemAttr: function(attr, value) {
-            Vue.set(this.item, attr, value);
-        }      
-    },
     watch: {
         item: { deep: true, handler: function(value) { 
             this.$emit('update:config', JSON.stringify(value));
         }},
-        value: function(value) { this.$emit('update:defaultValue', value.toString()); },
+        value: function(value) { this.$emit('update:defaultValue', value); },
     },
 
 });
