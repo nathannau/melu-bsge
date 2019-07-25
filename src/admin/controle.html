@@ -1,7 +1,7 @@
 <div>
     <label>
         Type : 
-        <select v-model="item.type" v-on:input="$emit('input', item)" >
+        <select v-model="item.type">
             <option v-for="(info,type) in types" v-bind:value="type">{{ info.label }}</option>
         </select>
     </label><br />
@@ -14,6 +14,7 @@
     </label><br />
     <div class="error" v-if="errorEmpty">Champs obligatoire.</div>
     <div class="error" v-else-if="errorIdInDouble">Identifiant en double.</div>
-    <label>Libelle : <input v-model="item.libelle" v-on:input="$emit('input', item)" /></label><br />
-    <component v-bind:is="subComponent" v-bind:default="item.defaultValue"></component>
+    <label>Libelle : <input v-model="item.libelle" /></label><br />
+    <component 
+        v-bind:is="subComponent" v-bind:defaultValue.sync="item.defaultValue" v-bind:config.sync="item.config" />
 </div>

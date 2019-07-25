@@ -1,19 +1,18 @@
 <div>
     <label>
         Valeur par défaut : 
-        <select v-model="item.type" v-on:input="$emit('input', item)" >
-            <option v-for="(info,type) in types" v-bind:value="type">{{ info.label }}</option>
-        </select>
+        <input v-bind:value="defaultValue" v-on:input="changeDefaultValue($event.target.valueAsNumber)" type="number" required="required" />
     </label><br />
     <label>
-        Identifiant : 
-        <input v-bind:value="item.controleId || item.newControleId"
-            v-on:input="changeId($event.target.value)"
-            v-bind:class="{ error: errorIdInDouble }"
-            v-bind:disabled="item.controleId" />
+        Minimum : 
+        <input v-bind:value="item.minimum" v-on:input="changeItemAttr('minimum', $event.target.valueAsNumber)" type="number" />
     </label><br />
-    <div class="error" v-if="errorEmpty">Champs obligatoire.</div>
-    <div class="error" v-else-if="errorIdInDouble">Identifiant en double.</div>
-    <label>Libelle : <input v-model="item.libelle" v-on:input="$emit('input', item)" /></label><br />
-    <component v-bind:is="subComponent" v-bind:default="item.defaultValue"></component>
+    <label>
+        Maximum : 
+        <input v-bind:value="item.maximum" v-on:input="changeItemAttr('maximum', $event.target.valueAsNumber)" type="number" />
+    </label><br />
+    <label>
+        Pas : 
+        <input v-bind:value="item.step" v-on:input="changeItemAttr('step', $event.target.valueAsNumber)" type="number" />
+    </label><br />
 </div>

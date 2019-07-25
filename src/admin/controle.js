@@ -5,7 +5,7 @@ var api = require('./Api');
 
 const types = {
     string: { label:"Texte", component: {template:'<div>Comp. Texte</div>'} },
-    numeric: { label:"Numérique", component: {template:'<div>Comp. Numérique</div>'} },
+    numeric: { label:"Numérique", component: require('./controle-numeric') },
     bool: { label:"Oui/Non", component: {template:'<div>Comp. Oui/Non</div>'} },
 };
 const invalidType = {template:'<div>Type invalide</div>'}
@@ -31,8 +31,16 @@ module.exports = Vue.component('controle', {
         changeId: function(value) {
             Vue.set(this.item, 'newControleId', value);
             this.$emit('input', this.item);
-        },        
-    }
+        },
+        test: function(v) {
+            console.log('controle.test :', v);
+        },
+    },
+    watch: {
+        item: { deep: true, handler: function(value) { 
+            this.$emit('input', value);
+        }},
+    },
 });
 
 
