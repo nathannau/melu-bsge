@@ -1,0 +1,25 @@
+<div>
+    <label>Valeurs</label>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libellé</th>
+                <th>Par défaut</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(value, id) in item.values">
+                <td><input v-model="id" type="text" /></td>
+                <td><input v-model="value" type="text" /></td>
+                <td><input v-model="value" v-bind:type="multiple?'checkbox':'radio'" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <button v-on:click="addValue">Ajouter une valeur</button>
+    <label>
+        Choix multiple : 
+        <label><input v-model="item.multiple" type="radio" v-bind:value="true" /> Oui</label>
+        <label><input v-model="item.multiple" type="radio" v-bind:value="false" /> Non</label>
+    </label><br />
+</div>

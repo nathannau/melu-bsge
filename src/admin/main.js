@@ -9,8 +9,8 @@ const Home = { template: '<p>Home</p>' };
 const Login = require('./login');
 const Controles = require('./controles');
 
-var menuMain = require('./menu-main');
-var overlay = require('./overlay');
+require('./menu-main');
+require('./overlay');
 require('./input-number');
 
 

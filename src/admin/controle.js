@@ -2,12 +2,16 @@
 
 var Vue = require('vue');
 var api = require('./Api');
+require('./controle-string');
+require('./controle-numeric');
+require('./controle-bool');
+require('./controle-list');
 
 const types = {
-    string: { label:"Texte", component: require('./controle-string') },
-    numeric: { label:"Numérique", component: require('./controle-numeric') },
-    bool: { label:"Oui/Non", component: require('./controle-bool') },
-    list: { label:"Liste", component: {template:'<div>Comp. Liste</div>'} },
+    string: { label:"Texte", component: 'controle-string' },
+    numeric: { label:"Numérique", component: 'controle-numeric' },
+    bool: { label:"Oui/Non", component: 'controle-bool' },
+    list: { label:"Liste", component: 'controle-list' },
 };
 const invalidType = {template:'<div>Type invalide</div>'}
 
