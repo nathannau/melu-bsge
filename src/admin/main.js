@@ -11,6 +11,8 @@ const Controles = require('./controles');
 
 var menuMain = require('./menu-main');
 var overlay = require('./overlay');
+require('./input-number');
+
 
 const routes = {
     '': Home,

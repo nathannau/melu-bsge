@@ -1,0 +1,11 @@
+<div>
+    <label>
+        Longueur max. : 
+        <input-number v-model="item.lenMax" min="0" />
+    </label><br />
+    <label>
+        Valeur par défaut : 
+        <input v-if="item.lenMax" v-model="value" type="text" v-bind:maxlength="item.lenMax" />
+        <textarea v-else v-model="value"></textarea>
+    </label><br />
+</div>

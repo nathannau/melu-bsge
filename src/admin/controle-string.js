@@ -3,8 +3,8 @@
 var Vue = require('vue');
 var api = require('./Api');
 
-module.exports = Vue.component('controle-numeric', { 
-    template: require('./controle-numeric.html'),
+module.exports = Vue.component('controle-string', { 
+    template: require('./controle-string.html'),
     props: {
         config: String,
         defaultValue: String
@@ -14,25 +14,14 @@ module.exports = Vue.component('controle-numeric', {
         try { item = JSON.parse(this.config); } catch { item = {}; }
         if (typeof(item)!='object') item = {};
 
-        var value = parseInt(this.defaultValue, 10)
-
         return {
             item:  Object.assign({
-                minimum: null,
-                maximum: null,
-                step: 1,
-                decimal:0,
+                lenMax: null,
             }, item),
-            value: isNaN(value) ? 0 : value,
+            value: this.defaultValue,
         };
     },
-    computed: {
-        precision: function() { return Math.pow(10, -this.item.decimal); }
-    },
     methods: {
-        changeDefaultValue: function(value) {
-            this.value = value;
-        },  
         changeItemAttr: function(attr, value) {
             Vue.set(this.item, attr, value);
         }      

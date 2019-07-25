@@ -4,7 +4,7 @@ var Vue = require('vue');
 var api = require('./Api');
 
 const types = {
-    string: { label:"Texte", component: {template:'<div>Comp. Texte</div>'} },
+    string: { label:"Texte", component: require('./controle-string') },
     numeric: { label:"Numérique", component: require('./controle-numeric') },
     bool: { label:"Oui/Non", component: {template:'<div>Comp. Oui/Non</div>'} },
     list: { label:"Liste", component: {template:'<div>Comp. Liste</div>'} },

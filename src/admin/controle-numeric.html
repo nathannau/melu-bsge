@@ -1,22 +1,22 @@
 <div>
     <label>
         Nombre de décimales : 
-        <input v-bind:value="item.decimal" v-on:input="changeItemAttr('decimal', $event.target.valueAsNumber)" type="number" min="0" max="10" />
+        <input-number v-model="item.decimal" min="0" max="10" />
     </label><br />
     <label>
         Valeur par défaut : 
-        <input v-bind:value="defaultValue" v-on:input="changeDefaultValue($event.target.valueAsNumber)" type="number" v-bind:step="precision" required="required" />
+        <input-number v-model="value" v-bind:step="precision" required="required" />
     </label><br />
     <label>
         Minimum : 
-        <input v-bind:value="item.minimum" v-on:input="changeItemAttr('minimum', $event.target.valueAsNumber)" type="number" v-bind:step="precision" />
+        <input-number v-model="item.minimum" v-bind:step="precision" />
     </label><br />
     <label>
         Maximum : 
-        <input v-bind:value="item.maximum" v-on:input="changeItemAttr('maximum', $event.target.valueAsNumber)" type="number" v-bind:step="precision" />
+        <input-number v-model="item.maximum" v-bind:step="precision" />
     </label><br />
     <label>
         Pas : 
-        <input v-bind:value="item.step" v-on:input="changeItemAttr('step', $event.target.valueAsNumber)" type="number" v-bind:step="precision" />
+        <input-number v-model="item.step" v-bind:step="precision" />
     </label><br />
 </div>
