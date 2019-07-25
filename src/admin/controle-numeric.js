@@ -24,9 +24,13 @@ module.exports = Vue.component('controle-numeric', {
                     minimum: null,
                     maximum: null,
                     step: 1,
+                    decimal:0,
                     }, item),
             value: isNaN(value) ? 0 : value,
         };
+    },
+    computed: {
+        precision: function() { return Math.pow(10, -this.item.decimal); }
     },
     methods: {
         changeDefaultValue: function(value) {

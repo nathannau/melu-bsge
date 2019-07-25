@@ -7,6 +7,7 @@ const types = {
     string: { label:"Texte", component: {template:'<div>Comp. Texte</div>'} },
     numeric: { label:"Numérique", component: require('./controle-numeric') },
     bool: { label:"Oui/Non", component: {template:'<div>Comp. Oui/Non</div>'} },
+    list: { label:"Liste", component: {template:'<div>Comp. Liste</div>'} },
 };
 const invalidType = {template:'<div>Type invalide</div>'}
 
