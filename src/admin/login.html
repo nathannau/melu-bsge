@@ -1,7 +1,7 @@
 <div class="login">
-    <label>Mot de passe
-            <br/>
-            <input v-model="pwd" id="pwd" />
+    <h1>Connexion</h1>
+    <label>Mot de passe<br/>
+        <input v-model="pwd" id="pwd" />
     </label>
     <button v-on:click="connect">Connexion</button>
     <div v-if="error" class="error">{{error}}</div>
