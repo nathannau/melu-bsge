@@ -1,5 +1,5 @@
-<div class="controles">
-    <h1>Controles</h1>
+<div class="gestionnaires">
+    <h1>Gestionnaires</h1>
     <div v-for="(item,index) in items" class="controle">
         <controle v-bind:value="item" :key="itemKey(item)"
             v-on:input="items.splice(index,1,$event)" 

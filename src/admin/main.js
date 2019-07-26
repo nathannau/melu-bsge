@@ -6,19 +6,20 @@ var api = require('./Api');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 const Home = { template: '<p>Home</p>' };
-const Login = require('./login');
-const Controles = require('./controles');
 
+require('./login');
+require('./controles');
+require('./gestionnaires');
 require('./menu-main');
 require('./overlay');
 require('./input-number');
 
-
 const routes = {
     '': Home,
     'home': Home,
-    'login': Login,
-    'controle': Controles,
+    'login': 'login',
+    'controle': 'controles',
+    'gestionnaire' : 'gestionnaires',
 }
 var app = new Vue({
     el: '#app',

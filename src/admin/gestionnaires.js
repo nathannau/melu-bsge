@@ -3,10 +3,10 @@
 var Vue = require('vue');
 //var qs = require('querystringify');
 var api = require('./Api');
-require('./controle');
+//require('./controle');
 
-module.exports = Vue.component('controles', { 
-    template: require('./controles.html'),
+module.exports = Vue.component('gestionnaires', { 
+    template: require('./gestionnaires.html'),
     data: function() { return {
         items: [],
         removed: [],

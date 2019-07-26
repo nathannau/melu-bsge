@@ -19,7 +19,9 @@ module.exports = Vue.component('controle-list', {
             for (var i in item.values)
                 valuePairs.push({ key:i, label:item.values[i] });
             
-        var selected = (this.defaultValue||"").split(';')
+        var valueSingle = this.defaultValue || "";
+        var valueMulti = valueSingle.split(';');
+        if (valueMulti.length>0) valueSingle = valueMulti[0];
 
         return {
             item: Object.assign({
@@ -27,7 +29,8 @@ module.exports = Vue.component('controle-list', {
                 values: {},
             }, item),
             valuePairs: valuePairs,
-            value: selected,
+            valueSingle: valueSingle,
+            valueMulti: valueMulti,
             true: true,
             false: false,
         };
@@ -42,17 +45,29 @@ module.exports = Vue.component('controle-list', {
             value.forEach(pair => { values[pair.key] = pair.label; });
             Vue.set(this.item, 'values', values);
         }},
+        'item.multiple': function(multiple) {
+        //     console.log('watch item.multiple');
+            if (multiple)
+                this.$emit('update:defaultValue', this.valueMulti.join(';'));
+                // this.valueMulti = this.valueMulti
+            
+        //         this.value=[this.value];
+        //     else if (Array.isArray(this.value) && this.value.length>0)
+        //         this.value=this.value[0];
+            else 
+                this.$emit('update:defaultValue', this.valueSingle.toString());
+        //         this.value=""
+        },
         item: { deep: true, handler: function(value) { 
+            // console.log('watch item');
             this.$emit('update:config', JSON.stringify(value));
         }},
-        value: function(value) { 
-            if (this.item.multiple) {
-                console.log(value);
-                value = value.filter(el=>{ return this.item.values[el]!=undefined});
-                this.$emit('update:defaultValue', value.join(';'));
-            }
-            else if (!this.item.multiple)
-                this.$emit('update:defaultValue', value);
+        valueSingle: function(value) { 
+            this.$emit('update:defaultValue', value.toString());
+        },
+        valueMulti: function(value) { 
+            value = value.filter(el=>{ return this.item.values[el]!=undefined});
+            this.$emit('update:defaultValue', value.join(';'));
         },
     },
 
