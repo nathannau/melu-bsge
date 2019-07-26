@@ -80,6 +80,24 @@ module.exports = function() {
             else
                 res.json({ status: "error"});
         })
+        // Config
+        .get('/config', hasRule('admin'), async function(req, res) {
+            console.log('GET /config');
+
+            var data = await gameConfig.export();
+            res.json({ 
+                status: "success",
+                data: data
+            });
+        })
+        .post('/config', hasRule('admin'), async function(req, res) {
+            console.log('POST /config');
+
+            await gameConfig.import(req.body);
+            res.json({ 
+                status: "success",
+            });
+        })
         // Controles
         .get('/controles', hasRule('admin'), async function(req, res) {
             console.log('GET /controles');
@@ -199,16 +217,16 @@ module.exports = function() {
         })
 
 
-        // Test
-        .get('/test', /*hasRule('admin'),*/ async function(req, res) {
-            console.log("/test");
+        // // Test
+        // .get('/test', /*hasRule('admin'),*/ async function(req, res) {
+        //     console.log("/test");
 
-            var datas = await gameConfig.export();
-            gameConfig.import(datas);
+        //     var datas = await gameConfig.export();
+        //     gameConfig.import(datas);
 
-            res.json({ 
-                status: "success",
-                datas: datas
-            });
-        });
+        //     res.json({ 
+        //         status: "success",
+        //         datas: datas
+        //     });
+        // });
 }

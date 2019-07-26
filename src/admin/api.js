@@ -79,6 +79,14 @@ class Api {
         return !!this.token;
     }
 
+    async getConfig() {
+        var rep = await this._asyncCall('GET', `/api/admin/config`);
+        return rep.data
+    }
+    async setConfig(config) {
+        await this._asyncCall('POST', `/api/admin/config`, config);
+    }
+
     async getControles() {
         var rep = await this._asyncCall('GET', `/api/admin/controles`);
         return rep.datas

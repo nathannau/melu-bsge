@@ -5,9 +5,9 @@ var qs = require('querystringify');
 var { ApiError, ApiUnauthorizedError } = require('./Api');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
-const Home = { template: '<p>Home</p>' };
 
 require('./login');
+require('./home');
 require('./controles');
 require('./gestionnaires');
 require('./menu-main');
@@ -29,8 +29,8 @@ Vue.config.errorHandler = function (err, vm, info) {
 }
 
 const routes = {
-    '': Home,
-    'home': Home,
+    '': 'home',
+    'home': 'home',
     'login': 'login',
     'controle': 'controles',
     'gestionnaire' : 'gestionnaires',
