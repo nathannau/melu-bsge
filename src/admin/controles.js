@@ -53,9 +53,7 @@ module.exports = Vue.component('controles', {
                 buttons: { no: "Non", yes: "Oui"},
                 onselect: (key) => {
                     if (key=="yes") {
-                        console.log(index, JSON.stringify(this.items, null, 4));
                         var item = this.items.splice(index,1)[0];
-                        console.log(JSON.stringify(this.items, null, 4));
                         if (item.controleId)
                             this.removed.push(item.controleId);
                     }
