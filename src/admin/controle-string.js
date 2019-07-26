@@ -1,7 +1,6 @@
 'use strict';
 
 var Vue = require('vue');
-var api = require('./Api');
 
 module.exports = Vue.component('controle-string', { 
     template: require('./controle-string.html'),

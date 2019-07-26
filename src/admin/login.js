@@ -1,7 +1,7 @@
 'use strict';
 
 var Vue = require('vue');
-var api = require('./Api');
+var { api } = require('./Api');
 
 module.exports = Vue.component('login', { 
     data: function() { return {

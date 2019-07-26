@@ -1,7 +1,6 @@
 'use strict';
 
 var Vue = require('vue');
-var api = require('./Api');
 
 module.exports = Vue.component('controle-list', { 
     template: require('./controle-list.html'),

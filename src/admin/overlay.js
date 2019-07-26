@@ -14,6 +14,11 @@ class OverlayPlugin {
             var index = overlays.indexOf(overlay);
             overlays.slice(index, 1);
         }
+        Vue.resetOverlay = function () {
+            overlays.forEach(overlay=>{
+                overlay.resetOverlay();
+            });
+        }
         
         Vue.prototype.$showLoading = function () {
             overlays.forEach(overlay=>{
@@ -106,7 +111,11 @@ module.exports = Vue.component('overlay', {
             var cb = this.ask.onselect;
             this.ask = null;
             if (cb) cb(key);
-        }
+        },
+        resetOverlay: function() {
+            this.hideLoading();
+            this.closeAlert();
+        },
     }
 });
 

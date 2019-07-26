@@ -2,7 +2,7 @@
 
 var Vue = require('vue');
 var qs = require('querystringify');
-var api = require('./Api');
+var { ApiError, ApiUnauthorizedError } = require('./Api');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 const Home = { template: '<p>Home</p>' };
@@ -13,6 +13,20 @@ require('./gestionnaires');
 require('./menu-main');
 require('./overlay');
 require('./input-number');
+
+//console.log(Vue.config.errorHandler);
+Vue.config.errorHandler = function (err, vm, info) {
+    if (err instanceof ApiUnauthorizedError) {
+        console.log('redirect to login', err)
+        window.location="#login";
+        Vue.resetOverlay();
+    }
+    // else if (err instanceof ApiError) {
+    //     console.log("ApiError : ", err)
+    // }
+
+    throw err;
+}
 
 const routes = {
     '': Home,

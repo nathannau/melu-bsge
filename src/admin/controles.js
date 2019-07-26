@@ -1,8 +1,7 @@
 'use strict';
 
 var Vue = require('vue');
-//var qs = require('querystringify');
-var api = require('./Api');
+var { api } = require('./Api');
 require('./controle');
 
 module.exports = Vue.component('controles', { 

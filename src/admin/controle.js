@@ -1,7 +1,6 @@
 'use strict';
 
 var Vue = require('vue');
-var api = require('./Api');
 require('./controle-string');
 require('./controle-numeric');
 require('./controle-bool');

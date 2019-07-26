@@ -1,6 +1,25 @@
 'use strict';
 
 var $ = require("jquery");
+var Vue = require('vue');
+
+class ApiError extends Error {
+    constructor(xhr, status, error, ...params) {
+        super("ApiError : generic", ...params);
+        this.xhr = xhr;
+        this.status = status;
+        this.error = error;
+    }
+}
+
+class ApiUnauthorizedError extends Error {
+    constructor(xhr, status, error, ...params) {
+        super("ApiError : Unauthorized access", ...params);
+        this.xhr = xhr;
+        this.status = status;
+        this.error = error;
+    }
+}
 
 class Api {
 
@@ -40,7 +59,12 @@ class Api {
     _asyncCall(method, path, data, settings = {}) {
         return new Promise((resolve, reject)=>{
             settings.success = resolve;
-            settings.error = reject;
+            settings.error = function(xhr, status, error) {
+                if (status=="error" && xhr.status==401) 
+                    reject(new ApiUnauthorizedError(xhr, status, error, __filename));
+                else 
+                    reject(new ApiError(xhr, status, error, __filename));
+            }
             this._call(method, path, data, settings);
         });
     }
@@ -112,24 +136,11 @@ class Api {
         await this._asyncCall('DELETE', `/api/admin/gestionnaires/${id}`);
     }
 
-    // test() {
-    //     var self = this;
-    //     this._call('GET', '/api/admin/test', { a:'aa', b:2}, {
-    //         success: function(data) {
-
-    //             console.log( 'success', data);
-    //         },
-    //     });
-
-    // }
-
-    // display() {
-    //     alert('cool !');
-    //     console.log($);
-    // }
-
-
 }
 
 
-module.exports = new Api();
+module.exports = { 
+    api: new Api(),
+    ApiError: ApiError,
+    ApiUnauthorizedError: ApiUnauthorizedError,
+};
