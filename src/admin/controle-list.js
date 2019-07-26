@@ -16,10 +16,10 @@ module.exports = Vue.component('controle-list', {
 
         var valuePairs = [];
         if (item.values) 
-            for ( i in item.values)
+            for (var i in item.values)
                 valuePairs.push({ key:i, label:item.values[i] });
             
-        var selected = this.defaultValue.split(';')
+        var selected = (this.defaultValue||"").split(';')
 
         return {
             item: Object.assign({
@@ -36,16 +36,24 @@ module.exports = Vue.component('controle-list', {
         addValue: function() { this.valuePairs.push({ key:'', label:'' }) }
     },
     watch: {
-        valuePairs: function(value) {
+        valuePairs: { deep: true, handler: function(value) {
             console.log('watch valuePairs');
             var values = {};
             value.forEach(pair => { values[pair.key] = pair.label; });
             Vue.set(this.item, 'values', values);
-        },
+        }},
         item: { deep: true, handler: function(value) { 
             this.$emit('update:config', JSON.stringify(value));
         }},
-        value: function(value) { this.$emit('update:defaultValue', value.join(';')); },
+        value: function(value) { 
+            if (this.item.multiple) {
+                console.log(value);
+                value = value.filter(el=>{ return this.item.values[el]!=undefined});
+                this.$emit('update:defaultValue', value.join(';'));
+            }
+            else if (!this.item.multiple)
+                this.$emit('update:defaultValue', value);
+        },
     },
 
 });
