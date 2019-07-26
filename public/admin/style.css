@@ -123,3 +123,15 @@ nav > ul li {
 .controles div.error {
     color: #aa0000;
 }
+
+
+/* Controles */
+.gestionnaires .gestionnaire {
+    margin-bottom: 20px;
+}
+/* .gestionnaires input.error {
+    background: #ffaaaa;
+}
+.gestionnaires div.error {
+    color: #aa0000;
+} */

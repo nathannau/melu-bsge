@@ -1,11 +1,10 @@
 <div class="gestionnaires">
     <h1>Gestionnaires</h1>
-    <div v-for="(item,index) in items" class="controle">
-        <controle v-bind:value="item" :key="itemKey(item)"
-            v-on:input="items.splice(index,1,$event)" 
-            v-bind:errorIdInDouble="hasErrorIdInDouble(item)"/>
+    <div v-for="(item,index) in items" class="gestionnaire">
+        <gestionnaire v-bind:value="item" :key="itemKey(item)"
+            v-on:input="items.splice(index,1,$event)" />
         <button v-on:click="remove(index)">Supprimer</button>
     </div>
     <button v-on:click="add">Nouveau</button><br />
-    <button v-on:click="save" v-bind:disabled="hasOneError">Enregistrer</button>
+    <button v-on:click="save">Enregistrer</button>
 </div>
