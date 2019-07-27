@@ -10,7 +10,7 @@
         </thead>
         <tbody>
             <tr v-for="(pair, index) in valuePairs">
-                <td><input v-model="pair.key" type="text" required="required" pattern="[^;]" /></td>
+                <td><input v-model="pair.key" type="text" required="required" pattern="[^;]*" /></td>
                 <td><input v-model="pair.label" type="text" /></td>
                 <td v-if="item.multiple"><input v-model="valueMulti"
                     v-bind:value="pair.key" type="checkbox" /></td>
