@@ -2,6 +2,7 @@
 
 var Vue = require('vue');
 var { api } = require('./Api');
+var $ = require("jquery");
 
 module.exports = Vue.component('home', { 
     template: require('./home.html'),
@@ -16,7 +17,6 @@ module.exports = Vue.component('home', {
             console.log(content);
             var url = window.URL.createObjectURL(content);
 
-            var $ = require("jquery");
             var lnk = $('<a />').attr({
                 href:url,
                 download: "melu.cnf",
@@ -25,20 +25,35 @@ module.exports = Vue.component('home', {
             lnk[0].click();
             lnk.remove();
             window.URL.revokeObjectURL(url);
-
-            //console.log(url);
-            //window.location = url;
             this.$hideLoading();
         },
         load: async function() {
-            // var succes = await api.login(this.pwd);
-            // this.error = succes ? false : "Mot de passe invalid"
-            // if (succes)
-            //     this.$openAlert( {
-            //         message:'Connexion réussi', 
-            //         timeout:2000, 
-            //         onclose:function() { window.location = '#home'; },
-            //     });
+            var inputFile = $('<input />').attr({
+                type:'file',
+                accept:'.cnf',
+            }).css({ display:'none'});
+            inputFile.appendTo('body');
+            var that = this;
+            inputFile[0].onchange = async function(ev) {
+                var files = ev.target.files;
+                if (!files.length) return;
+
+                var file = files[0];
+                var reader = new FileReader();
+                var readerPromise = new Promise((resolve, reject)=>{
+                    reader.onload = function (evt) { resolve(evt.target.result); }
+                    reader.onerror = function (evt) { reject(evt); }
+                });
+                reader.readAsText(file, "UTF-8");
+                var content = await readerPromise;
+                content = JSON.parse(content);
+                that.$showLoading();
+                await api.setConfig(content);
+                that.$hideLoading();
+            }
+            inputFile[0].click();
+            inputFile.remove();
+
         },
 
     },

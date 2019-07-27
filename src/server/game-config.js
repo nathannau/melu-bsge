@@ -85,7 +85,7 @@ class GameConfig {
                 for (let i in queries) {
                     this.db.run(queries[i].delete.query);
                     for (let j=0; j<datas[i].length; j++) {
-                        console.log(queries[i].insert.query, queries[i].insert.args.map(x => datas[i][j][x]));
+                        //console.log(queries[i].insert.query, queries[i].insert.args.map(x => datas[i][j][x]));
                         this.db.run(
                             queries[i].insert.query, 
                             queries[i].insert.args.map(x => datas[i][j][x]),
