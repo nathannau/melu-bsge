@@ -50,6 +50,10 @@ module.exports = Vue.component('home', {
                 that.$showLoading();
                 await api.setConfig(content);
                 that.$hideLoading();
+                that.$openAlert({
+                    title:'Restauration', 
+                    message:'Configuration restaurée avec succès', 
+                    timeout:2000})
             }
             inputFile[0].click();
             inputFile.remove();
