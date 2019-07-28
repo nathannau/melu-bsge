@@ -1,6 +1,20 @@
 <div>
     <label>Libelle : <input v-model="item.libelle" /></label><br />
-    {{ item.config }}
-    <!-- <component 
-        v-bind:is="subComponent" v-bind:defaultValue.sync="item.defaultValue" v-bind:config.sync="item.config" /> -->
+
+    <select ref="currentControl">
+        <option value="">------</option>
+        <option v-for="controle in controles" v-bind:value="controle.controleId">{{ controle.libelle }} ({{ controle.controleId}})</option>
+    </select>
+    <button v-on:click="ajouter">Ajouter</button>
+
+    <div>
+        <div v-for="(controleId, index) in config.controles">
+            <button v-on:click="moveControle(-1, index)" v-bind:disabled="index==0" >/\</button>
+            <button v-on:click="moveControle(+1, index)" v-bind:disabled="index==config.controles.length-1" >\/</button>
+            <button v-on:click="removeControle(index)">X</button>
+            <span v-if="controleId">{{ getControleLibelle(controleId) }} ({{controleId}})</span>
+            <span v-else>------</span>
+        </div>
+    </div>
 </div>
+    

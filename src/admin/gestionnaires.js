@@ -8,14 +8,26 @@ module.exports = Vue.component('gestionnaires', {
     template: require('./gestionnaires.html'),
     data: function() { return {
         items: [],
+        controles: [],
         removed: [],
     }},
     mounted: async function() {
         this.$showLoading();
-        this.items = await api.getGestionnaires();
+        this.items.splice(0, this.items.length, ... await api.getGestionnaires());
+        // this.items = await api.getGestionnaires();
+        this.controles.splice(0, this.controles.length, ... await api.getControles());
+        //this.controles = await api.getControles();
         this.$hideLoading();
     },
+    provide: function() {
+        return {
+            controles: this.controles,
+        }
+    },
     methods: {
+        // getControles: function() {
+        //     return this.controles;
+        // },
         itemKey: function(item) {
             if (item.gestionnaireId) return item.gestionnaireId;
             if (!item.tmpKey) item.tmpKey = Math.random().toString(36).substring(2);
@@ -53,6 +65,7 @@ module.exports = Vue.component('gestionnaires', {
             this.removed.forEach(async key => {
                 await api.removeGestionnaire(key);
             });
+            this.removed.splice(0, this.removed.length);
             this.$hideLoading();
             this.$openAlert({
                 title:'Sauvegarde', 
