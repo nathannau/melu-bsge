@@ -12,7 +12,8 @@ module.exports = Vue.component('controles', {
     }},
     mounted: async function() {
         this.$showLoading();
-        this.items = await api.getControles();
+        this.items.splice(0, this.items.length, ... await api.getControles());
+        // this.items = await api.getControles();
         this.$hideLoading();
     },
     computed: {
@@ -69,6 +70,7 @@ module.exports = Vue.component('controles', {
             this.removed.forEach(async key => {
                 await api.removeControle(key);
             });
+            this.removed.splice(0, this.removed.length);
             this.$hideLoading();
             this.$openAlert({
                 title:'Sauvegarde', 
