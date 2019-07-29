@@ -7,11 +7,12 @@ var { ApiError, ApiUnauthorizedError } = require('./Api');
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 
 require('./login');
+require('./overlay');
 require('./home');
 require('./controles');
+require('./consoles');
 require('./gestionnaires');
 require('./menu-main');
-require('./overlay');
 require('./input-number');
 
 //console.log(Vue.config.errorHandler);
@@ -33,6 +34,7 @@ const routes = {
     'home': 'home',
     'login': 'login',
     'controle': 'controles',
+    'console': 'consoles',
     'gestionnaire' : 'gestionnaires',
 }
 var app = new Vue({

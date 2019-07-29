@@ -14,9 +14,7 @@ module.exports = Vue.component('gestionnaires', {
     mounted: async function() {
         this.$showLoading();
         this.items.splice(0, this.items.length, ... await api.getGestionnaires());
-        // this.items = await api.getGestionnaires();
         this.controles.splice(0, this.controles.length, ... await api.getControles());
-        //this.controles = await api.getControles();
         this.$hideLoading();
     },
     provide: function() {

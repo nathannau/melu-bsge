@@ -2,18 +2,25 @@
 
 var Vue = require('vue');
 var { api } = require('./Api');
-require('./controle');
+//require('./console');
 
-module.exports = Vue.component('controles', { 
-    template: require('./controles.html'),
+module.exports = Vue.component('consoles', { 
+    template: require('./consoles.html'),
     data: function() { return {
         items: [],
+        controles: [],
         removed: [],
     }},
     mounted: async function() {
         this.$showLoading();
-        this.items.splice(0, this.items.length, ... await api.getControles());
+        this.items.splice(0, this.items.length, ... await api.getConsoles());
+        this.controles.splice(0, this.controles.length, ... await api.getControles());
         this.$hideLoading();
+    },
+    provide: function() {
+        return {
+            controles: this.controles,
+        }
     },
     computed: {
         hasOneError: function() {
@@ -22,26 +29,25 @@ module.exports = Vue.component('controles', {
     },
     methods: {
         hasErrorIdInDouble: function(item) {
-            return !item.controleId && 
+            return !item.consoleId && 
                 this.items.find((el)=>{ return el!=item && 
-                    (el.controleId || el.newControleId)==item.newControleId; });
+                    (el.consoleId || el.newConsoleId)==item.newConsoleId; });
         },
         hasError: function(item) {
-            if (!item.controleId)
-                return !item.newControleId || this.hasErrorIdInDouble(item);
+            if (!item.consoleId)
+                return !item.newConsoleId || this.hasErrorIdInDouble(item);
             return false;
         },
         itemKey: function(item) {
-            if (item.controleId) return item.controleId;
+            if (item.consoleId) return item.consoleId;
             if (!item.tmpKey) item.tmpKey = Math.random().toString(36).substring(2);
             return item.tmpKey;
         },
         add: function() {
             this.items.push({
-                controleId:	null,
-                newControleId:	null,
-                libelle: "Nouv Controle",
-                defaultValue: null,
+                consoleId:	null,
+                newConsoleId:	null,
+                libelle: "Nouv Console",
                 type: "numeric",
                 config: "{}",
             });
@@ -49,13 +55,13 @@ module.exports = Vue.component('controles', {
         remove: function(index) {
             this.$openAsk({
                 title: "Supprimer",
-                message: "Voulez vous supprimer ce controle ?",
+                message: "Voulez vous supprimer cette console ?",
                 buttons: { no: "Non", yes: "Oui"},
                 onselect: (key) => {
                     if (key=="yes") {
                         var item = this.items.splice(index,1)[0];
-                        if (item.controleId)
-                            this.removed.push(item.controleId);
+                        if (item.consoleId)
+                            this.removed.push(item.consoleId);
                     }
                 }
             })
@@ -63,17 +69,17 @@ module.exports = Vue.component('controles', {
         save: async function() { 
             this.$showLoading();
             this.items.forEach(async item => {
-                await api.setControle(item.controleId || item.newControleId, item);
-                item.controleId = item.controleId || item.newControleId;
+                await api.setConsole(item.consoleId || item.newConsoleId, item);
+                item.consoleId = item.consoleId || item.newConsoleId;
             });
             this.removed.forEach(async key => {
-                await api.removeControle(key);
+                await api.removeConsole(key);
             });
             this.removed.splice(0, this.removed.length);
             this.$hideLoading();
             this.$openAlert({
                 title:'Sauvegarde', 
-                message:'Controles sauvegardés avec succès', 
+                message:'Consoles sauvegardées avec succès', 
                 timeout:2000});
         },
     }

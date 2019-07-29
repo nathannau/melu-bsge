@@ -131,6 +131,16 @@ nav > ul li {
     color: #aa0000;
 }
 
+/* Consoles */
+.consoles .console {
+    margin-bottom: 20px;
+}
+.consoles input.error {
+    background: #ffaaaa;
+}
+.consoles div.error {
+    color: #aa0000;
+}
 
 /* Gestionnaires */
 .gestionnaires .gestionnaire {
