@@ -1,0 +1,20 @@
+<div>
+    <label>
+        Type : 
+        <select v-model="item.type">
+            <option v-for="(info,type) in types" v-bind:value="type">{{ info.label }}</option>
+        </select>
+    </label><br />
+    <label>
+        Identifiant : 
+        <input v-bind:value="item.consoleId || item.newConsoleId"
+            v-on:input="changeId($event.target.value)"
+            v-bind:class="{ error: errorIdInDouble }"
+            v-bind:disabled="item.consoleId" />
+    </label><br />
+    <div class="error" v-if="errorEmpty">Champs obligatoire.</div>
+    <div class="error" v-else-if="errorIdInDouble">Identifiant en double.</div>
+    <label>Libelle : <input v-model="item.libelle" /></label><br />
+    <component 
+        v-bind:is="subComponent" v-bind:model="item.config" />
+</div>

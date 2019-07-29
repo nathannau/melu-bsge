@@ -1,9 +1,9 @@
 <div class="consoles">
     <h1>Consoles</h1>
     <div v-for="(item,index) in items" class="console">
-        <!-- <console v-bind:value="item" :key="itemKey(item)"
+        <console v-bind:value="item" :key="itemKey(item)"
             v-on:input="items.splice(index,1,$event)" 
-            v-bind:errorIdInDouble="hasErrorIdInDouble(item)"/> -->
+            v-bind:errorIdInDouble="hasErrorIdInDouble(item)"/>
         <button v-on:click="remove(index)">Supprimer</button>
     </div>
     <button v-on:click="add">Nouvelle</button><br />

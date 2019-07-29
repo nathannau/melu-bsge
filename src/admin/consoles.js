@@ -2,7 +2,7 @@
 
 var Vue = require('vue');
 var { api } = require('./Api');
-//require('./console');
+require('./console');
 
 module.exports = Vue.component('consoles', { 
     template: require('./consoles.html'),
