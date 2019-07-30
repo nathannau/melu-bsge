@@ -1,7 +1,7 @@
 'use strict';
 
 var Vue = require('vue');
-// require('./console-screen');
+require('./console-screen');
 require('./console-microp');
 
 const types = {
