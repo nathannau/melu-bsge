@@ -15,6 +15,5 @@
     <div class="error" v-if="errorEmpty">Champs obligatoire.</div>
     <div class="error" v-else-if="errorIdInDouble">Identifiant en double.</div>
     <label>Libelle : <input v-model="item.libelle" /></label><br />
-    <component 
-        v-bind:is="subComponent" v-bind:model="item.config" />
+    <component  v-bind:is="subComponent" v-model="item.config" />
 </div>

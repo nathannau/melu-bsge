@@ -1,0 +1,31 @@
+<div>
+    <!-- <label>Valeurs</label> -->
+    <table>
+        <thead>
+            <tr>
+                <th>Controle</th>
+                <th>Pin</th>
+                <th>Direction</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(pair, index) in item.controles">
+                <td>
+                    <select v-model="pair.controleId">
+                        <option v-for="ctrl in controles" v-bind:value="ctrl.controleId">{{ ctrl.libelle }} ({{ ctrl.controleId }})</option>
+                    </select>
+                </td>
+                <td><input-number v-model="pair.pin" min="1" max="30" /></td>
+                <td>
+                    <select v-model="pair.direction">
+                        <option value="IN">Entrée</option>
+                        <option value="OUT">Sortie</option>
+                    </select>
+                </td>
+                <td><button v-on:click="removeValue(index)">Supprimer</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button v-on:click="addValue">Ajouter une valeur</button>
+</div>

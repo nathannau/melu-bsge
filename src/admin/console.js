@@ -3,8 +3,6 @@
 var Vue = require('vue');
 // require('./console-screen');
 require('./console-microp');
-// require('./controle-bool');
-// require('./controle-list');
 
 const types = {
     screen: { label:"Ecran", component: 'console-screen' },
