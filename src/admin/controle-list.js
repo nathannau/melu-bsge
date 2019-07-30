@@ -35,7 +35,8 @@ module.exports = Vue.component('controle-list', {
         };
     },
     methods: {
-        addValue: function() { this.valuePairs.push({ key:'', label:'' }) }
+        addValue: function() { this.valuePairs.push({ key:'', label:'' }) },
+        removeValue: function(index) { this.valuePairs.splice(index, 1); },
     },
     watch: {
         valuePairs: { deep: true, handler: function(value) {

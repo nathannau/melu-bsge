@@ -6,6 +6,7 @@
                 <th>Id</th>
                 <th>Libellé</th>
                 <th>Par défaut</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -17,7 +18,8 @@
                 <td v-else><input v-model="valueSingle" v-bind:name="'defaultValue'+_uid"
                     v-bind:value="pair.key" type="radio" 
                     required="required" /></td>
-                </tr>
+                <td><button v-on:click="removeValue(index)">Supprimer</button></td>
+            </tr>
         </tbody>
     </table>
     <button v-on:click="addValue">Ajouter une valeur</button>
