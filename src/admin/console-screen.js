@@ -1,6 +1,7 @@
 'use strict';
 
 var Vue = require('vue');
+require('./file-editor');
 
 module.exports = Vue.component('console-screen', { 
     template: require('./console-screen.html'),
@@ -14,12 +15,16 @@ module.exports = Vue.component('console-screen', {
 
         return {
             item:  Object.assign({
-                controles: [],
+                // controles: [],
+                html: "",
+                js: "",
+                css: "",
+                images: []
             }, item),
-            controles: this.controles,
+            // controles: this.controles,
         };
     },
-    inject: [ 'controles' ],
+    // inject: [ 'controles' ],
     watch: {
         item: { deep:true, handler: function(value) { 
             this.$emit('input', JSON.stringify(value));

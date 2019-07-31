@@ -1,19 +1,20 @@
 <div>
     <label>
-        Html : 
-        <textarea v-model="value" type="radio" value="true" />
+        Html : <br/>
+        <file-editor v-model="item.html" type="html" filename="index.html" />
     </label><br />
     <label>
         Javascript : 
-        <input v-model="value" type="radio" value="true" />
+        <input v-model="item.js" type="text" />
     </label><br />
     <label>
         CSS : 
-        <input v-model="value" type="radio" value="true" />
+        <input v-model="item.css" type="text" />
     </label><br />
     <label>
         Images : 
-        <label><input v-model="value" type="radio" value="true" /> Oui</label>
-        <label><input v-model="value" type="radio" value="false" /> Non</label>
+        <div v-for="image in item.images">
+            <input v-bind:value.sync="image" type="text" />
+        </div>
     </label><br />
 </div>
