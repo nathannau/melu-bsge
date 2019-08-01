@@ -1,9 +1,10 @@
 <drop-zone v-on:drop="drop">
-    <button v-on:click="switchEditor">{{ editing ? 'Fermer':'Ouvrir' }}</button>
-    <button v-on:click="download">Télécharger</button>
-    <button v-on:click="upload">Envoie</button>
+    <div>
+        <button v-on:click="switchEditor">{{ editing ? 'Fermer':'Ouvrir' }}</button>
+        <button v-on:click="download">Télécharger</button>
+        <button v-on:click="upload">Téléverser</button>
+    </div>
     <div v-bind:style="{ display:editing?'':'none' }">
-        Content
-        <code v-bind:class="type" contenteditable="true">{{ content}}</code>
+        <code ref="code" style="white-space: pre;" v-bind:class="type" contenteditable="true" v-on:input="cntInput" v-on:change="cntChange">{{ content }}</code>
     </div>
 </drop-zone>
