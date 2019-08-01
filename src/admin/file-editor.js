@@ -29,11 +29,30 @@ module.exports = Vue.component('file-editor', {
     },
     mounted: function() {
         console.log("mounted")
-        console.log(this.$refs.code.innerHTML)
+        // console.log(this.$refs.code.innerHTML)
         hljs.highlightBlock(this.$refs.code);
     },
     methods: {
-        cntInput: function() { console.log('cntInput'); },
+        cntInput: function(ev) { 
+            console.log('cntInput', arguments); 
+            this.$emit('input', this.$refs.code.innerText);
+            console.log(this.$refs.code);
+
+            var selection = document.getSelection();
+            var ranges = selection.getRangeAt(0).getClientRects();
+            var selectionPosition = {
+                x1: ranges[0].left,
+                y1: ranges[0].top,
+                x2: ranges[ranges.length-1].right,
+                y2: ranges[ranges.length-1].bottom,
+            };
+            hljs.highlightBlock(this.$refs.code);
+            var pos1 = document.caretPositionFromPoint(selectionPosition.x1, selectionPosition.y1);
+            var pos2 = document.caretPositionFromPoint(selectionPosition.x2, selectionPosition.y2);
+            
+
+            //console.log(this.$refs.code.innerHTML);
+        },
         // cntChange: function() { console.log('cntChange'); },
 
         switchEditor: function() { 

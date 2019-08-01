@@ -5,6 +5,6 @@
         <button v-on:click="upload">Téléverser</button>
     </div>
     <div v-bind:style="{ display:editing?'':'none' }">
-        <code ref="code" style="white-space: pre;" v-bind:class="type" contenteditable="true" v-on:input="cntInput" v-on:change="cntChange">{{ content }}</code>
+        <code ref="code" style="white-space: pre;" v-bind:class="type" contenteditable="true" v-on:input="cntInput">{{ content }}</code>
     </div>
 </drop-zone>
