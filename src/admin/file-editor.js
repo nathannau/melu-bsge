@@ -7,7 +7,9 @@ var hljs = require('highlight.js')
 
 module.exports = Vue.component('file-editor', { 
     template: require('./file-editor.html'),
-    model: { prop: 'content' },
+    model: {
+        prop: 'content',
+    },
     props: {
         filename: String,
         content: String,
@@ -15,24 +17,22 @@ module.exports = Vue.component('file-editor', {
         extension: String,
     },
     data: function() { 
-    //     var item = null;
-    //     try { item = JSON.parse(this.value); } catch { item = {}; }
-    //     if (typeof(item)!='object') item = {};
-
         return {
-            editing: false
-    //         item:  Object.assign({
-    //             controles: [],
-    //         }, item),
-    //         controles: this.controles,
+            editing: false,
         };
     },
     mounted: function() {
-        console.log("mounted")
-        // console.log(this.$refs.code.innerHTML)
+        // console.log("mounted")
+        this.setContent(this.content);
         hljs.highlightBlock(this.$refs.code);
     },
     methods: {
+        getContent: function() { 
+            return this.$refs.code.innerText; 
+        },
+        setContent: function(v) { 
+            this.$refs.code.innerText = v; 
+        },
         refreshHighlight: function() {
             var selection = document.getSelection();
             var ranges = selection.getRangeAt(0).getClientRects();
@@ -55,7 +55,7 @@ module.exports = Vue.component('file-editor', {
             clearTimeout(this.refreshHighlightTimer);
             this.refreshHighlightTimer = setTimeout(()=>{this.refreshHighlight();}, 1500);
 
-            this.$emit('input', this.$refs.code.innerText);
+            this.$emit('input', this.getContent());
         },
         insertTab: function(ev) {
             // console.log('insertTab : ', ev);
@@ -69,10 +69,9 @@ module.exports = Vue.component('file-editor', {
                 text.substr(0, range.startOffset) + 
                 "\t" + 
                 text.substr(range.startOffset);
-
             range.setStart(container, offset+1);
                 
-            this.$emit('input', this.$refs.code.innerText);
+            this.$emit('input', this.getContent());
             },
         switchEditor: function() { 
             // console.log('Switch !'); 
@@ -80,12 +79,14 @@ module.exports = Vue.component('file-editor', {
         },
         drop: function(content) { 
             //console.log('TODO fe.drop !', arguments); 
+            this.setContent(content);
+            hljs.highlightBlock(this.$refs.code);
             this.$emit('input', content);
         },
         download: function() { 
             // console.log('TODO download !', arguments); 
-            var content = new Blob([this.content], {type: 'application/octet-stream' /*'text/plain'*/});
-            console.log(content);
+            var content = new Blob([this.getContent()], {type: 'application/octet-stream' /*'text/plain'*/});
+            //console.log(content);
             var url = window.URL.createObjectURL(content);
 
             var lnk = $('<a />').attr({
@@ -123,11 +124,6 @@ module.exports = Vue.component('file-editor', {
             inputFile.remove();
         },
     }
-    // watch: {
-    //     item: { deep:true, handler: function(value) { 
-    //         this.$emit('input', JSON.stringify(value));
-    //     } },
-    // },
 
 });
 

@@ -1,21 +1,16 @@
 <div>
-    <!-- <label> -->
-        Html : <br/>
-        <file-editor v-model="item.html" type="html" extension=".html,.htm" filename="index.html" />
-    <!-- </label> -->
+    Html : <br/>
+    <file-editor v-model="item.html" type="html" extension=".html,.htm" filename="index.html" />
     <br />
-    <label>
-        Javascript : 
-        <input v-model="item.js" type="text" />
-    </label><br />
-    <label>
-        CSS : 
-        <input v-model="item.css" type="text" />
-    </label><br />
-    <label>
-        Images : 
-        <div v-for="image in item.images">
-            <input v-bind:value.sync="image" type="text" />
-        </div>
-    </label><br />
+    Javascript : 
+    <file-editor v-model="item.js" type="js" extension=".js" filename="script.js" />
+    <br />
+    CSS : 
+    <file-editor v-model="item.css" type="css" extension=".css" filename="style.css" />
+    <br />
+    Images : 
+    <div v-for="image in item.images">
+        <input v-bind:value.sync="image" type="text" />
+    </div>
+    <br />
 </div>

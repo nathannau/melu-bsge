@@ -6,6 +6,6 @@
     </div>
     <div v-bind:style="{ display:editing?'':'none' }">
         <code ref="code" contenteditable="true" style="white-space: pre;" 
-            v-bind:class="type" v-on:input="cntInput" v-on:keydown.tab="insertTab">{{ content }}</code>
+            v-bind:class="type" v-on:input="cntInput" v-on:keydown.tab="insertTab"></code>
     </div>
 </drop-zone>
