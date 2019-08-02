@@ -33,28 +33,47 @@ module.exports = Vue.component('file-editor', {
         hljs.highlightBlock(this.$refs.code);
     },
     methods: {
-        cntInput: function(ev) { 
-            console.log('cntInput', arguments); 
-            this.$emit('input', this.$refs.code.innerText);
-            console.log(this.$refs.code);
-
+        refreshHighlight: function() {
             var selection = document.getSelection();
             var ranges = selection.getRangeAt(0).getClientRects();
             var selectionPosition = {
                 x1: ranges[0].left,
                 y1: ranges[0].top,
                 x2: ranges[ranges.length-1].right,
-                y2: ranges[ranges.length-1].bottom,
+                y2: ranges[ranges.length-1].top,
             };
             hljs.highlightBlock(this.$refs.code);
             var pos1 = document.caretPositionFromPoint(selectionPosition.x1, selectionPosition.y1);
             var pos2 = document.caretPositionFromPoint(selectionPosition.x2, selectionPosition.y2);
-            
-
-            //console.log(this.$refs.code.innerHTML);
+            //var range = document.createRange();
+            var range = document.getSelection().getRangeAt(0);
+            range.setStart(pos1.offsetNode, pos1.offset);
+            range.setEnd(pos2.offsetNode, pos2.offset);
         },
-        // cntChange: function() { console.log('cntChange'); },
+        cntInput: function(ev) { 
+            // console.log('cntInput', arguments); 
+            clearTimeout(this.refreshHighlightTimer);
+            this.refreshHighlightTimer = setTimeout(()=>{this.refreshHighlight();}, 1500);
 
+            this.$emit('input', this.$refs.code.innerText);
+        },
+        insertTab: function(ev) {
+            // console.log('insertTab : ', ev);
+            ev.preventDefault();
+            var range = document.getSelection().getRangeAt(0);
+            var container = range.startContainer, offset = range.startOffset
+
+            if (range.startContainer.nodeType != Node.TEXT_NODE) return;
+            var text = range.startContainer.nodeValue;
+            range.startContainer.nodeValue = 
+                text.substr(0, range.startOffset) + 
+                "\t" + 
+                text.substr(range.startOffset);
+
+            range.setStart(container, offset+1);
+                
+            this.$emit('input', this.$refs.code.innerText);
+            },
         switchEditor: function() { 
             // console.log('Switch !'); 
             this.editing = !this.editing; 
