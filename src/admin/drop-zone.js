@@ -4,28 +4,9 @@ var Vue = require('vue');
 
 module.exports = Vue.component('drop-zone', { 
     template: require('./drop-zone.html'),
-    // model: { prop: 'content' },
-    // props: {
-    //     filename: String,
-    //     content: String,
-    //     type: String,
-    // },
-    // data: function() { 
-    // //     var item = null;
-    // //     try { item = JSON.parse(this.value); } catch { item = {}; }
-    // //     if (typeof(item)!='object') item = {};
-
-    //     return {
-    //         editing: false
-    // //         item:  Object.assign({
-    // //             controles: [],
-    // //         }, item),
-    // //         controles: this.controles,
-    //     };
-    // },
     methods: {
         drop: function(ev) { 
-            console.log('TODO drop !', arguments, ev.dataTransfer);
+            //console.log('drop !', arguments, ev.dataTransfer);
             ev.preventDefault(); 
             var files = ev.dataTransfer.files;
             for (let i = 0; i < files.length; i++) {
@@ -42,11 +23,6 @@ module.exports = Vue.component('drop-zone', {
             ev.preventDefault();
         },
     }
-    // watch: {
-    //     item: { deep:true, handler: function(value) { 
-    //         this.$emit('input', JSON.stringify(value));
-    //     } },
-    // },
 
 });
 
