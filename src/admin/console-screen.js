@@ -2,6 +2,7 @@
 
 var Vue = require('vue');
 require('./file-editor');
+require('./image-editor');
 
 module.exports = Vue.component('console-screen', { 
     template: require('./console-screen.html'),
@@ -24,7 +25,18 @@ module.exports = Vue.component('console-screen', {
             // controles: this.controles,
         };
     },
-    // inject: [ 'controles' ],
+    methods: {
+        addImage: function() {
+            this.item.images.push({
+                content:null,
+                filename: null,
+                type:null,
+            });
+        },
+        removeImage: function(index) {
+            this.item.images.splice(index,1);
+        }
+    },
     watch: {
         item: { deep:true, handler: function(value) { 
             this.$emit('input', JSON.stringify(value));

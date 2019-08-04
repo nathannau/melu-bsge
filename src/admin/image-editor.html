@@ -1,0 +1,10 @@
+<drop-zone v-on:drop="drop" type="array">
+    {{ image.filename || 'Nouvelle image' }}
+    <button v-on:click="changeSize(+1)" v-bind:disabled="size>=2 || !image.content">+</button>
+    <button v-on:click="changeSize(-1)" v-bind:disabled="size&lt;=0">-</button>
+    <button v-on:click="download">Télécharger</button>
+    <button v-on:click="upload">Téléverser</button>
+    <slot name="buttons" />
+    <br/>
+    <img v-bind:style="styleBySize" v-bind:src="content"></code>
+</drop-zone>

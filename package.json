@@ -21,6 +21,7 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
+    "base64-arraybuffer": "^0.2.0",
     "browserify": "^16.3.0",
     "copyfiles": "^2.1.1",
     "highlight.js": "^9.15.9",

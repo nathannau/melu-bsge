@@ -8,9 +8,15 @@
     CSS : 
     <file-editor v-model="item.css" type="css" extension=".css" filename="style.css" />
     <br />
-    Images : 
-    <div v-for="image in item.images">
-        <input v-bind:value.sync="image" type="text" />
+    Images : <button v-on:click="addImage">Nouvelle</button>
+    <div v-for="(image, index) in item.images">
+        <image-editor v-bind:value="image" :key="image.filename" v-on:input="item.images.splice(index,1,$event)" type="text" 
+            v-bind:previewSize="{width:150, height:150}" extensions=".jpeg,.jpg,.gif,.png">
+            <template v-slot:buttons>
+                <button v-on:click="removeImage(index)">Supprimer</button>
+            </template>
+        </image-editor>
     </div>
+    <br />
     <br />
 </div>

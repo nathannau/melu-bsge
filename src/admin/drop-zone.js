@@ -4,6 +4,9 @@ var Vue = require('vue');
 
 module.exports = Vue.component('drop-zone', { 
     template: require('./drop-zone.html'),
+    props: {
+        type: String,
+    },
     methods: {
         drop: function(ev) { 
             //console.log('drop !', arguments, ev.dataTransfer);
@@ -13,9 +16,21 @@ module.exports = Vue.component('drop-zone', {
                 let file = files[i];
                 let fr = new FileReader();
                 fr.onload = evt=>{
-                    this.$emit('drop', evt.target.result);
+                    this.$emit('drop', { 
+                        content: evt.target.result,
+                        filename: file.name,
+                        contentType: file.type,
+                        size: file.size,
+                    });
                 }
-                fr.readAsText(file);
+                if (this.type=='text')
+                    fr.readAsText(file);
+                else if (this.type=='binary')
+                    fr.readAsBinaryString(file);
+                else if (this.type=='array')
+                    fr.readAsArrayBuffer(file);
+                else if (this.type=='url')
+                    fr.readAsDataURL(file);
             }
         },
         dragover: function(ev) { 

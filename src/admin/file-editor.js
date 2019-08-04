@@ -77,11 +77,11 @@ module.exports = Vue.component('file-editor', {
             // console.log('Switch !'); 
             this.editing = !this.editing; 
         },
-        drop: function(content) { 
+        drop: function(file) { 
             //console.log('TODO fe.drop !', arguments); 
-            this.setContent(content);
+            this.setContent(file.content);
             hljs.highlightBlock(this.$refs.code);
-            this.$emit('input', content);
+            this.$emit('input', file.content);
         },
         download: function() { 
             // console.log('TODO download !', arguments); 
