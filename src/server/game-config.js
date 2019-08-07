@@ -188,6 +188,13 @@ class GameConfig {
             this.db.all(`SELECT * FROM gestionnaire`, (err, rows) => { resolve(rows) });
         });
     }
+    async getGestionnairesLabels() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.all(`SELECT gestionnaireId, libelle FROM gestionnaire`, (err, rows) => { resolve(rows) });
+        });
+    }
+
     async getGestionnaire(gestionnaireId) {
         await this.waitInit();
         return new Promise(resolve=>{

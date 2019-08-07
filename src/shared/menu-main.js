@@ -1,6 +1,7 @@
 'use strict';
 
 var Vue = require('vue');
+var qs = require('querystringify');
 
 // const items = [
 //     { route: 'home',         libelle: 'Home'},
@@ -19,6 +20,12 @@ module.exports = Vue.component('menu-main', {
     // data: function() { return {
     //     items: items
     // }}
+    methods: {
+        getOptions: function(route) {
+            if (!route.arguments) return '';
+            return qs.stringify(route.arguments, true);
+        }
+    }
 });
 
 

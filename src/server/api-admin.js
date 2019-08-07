@@ -42,7 +42,7 @@ function hasRule(rules) {
     var config = getConfig();
 
     return function(req, res, next) {
-        next(); return;
+        // next(); return;
         var parts = req.headers.authorization ? req.headers.authorization.split(' ') : [];
         if (parts.length != 2)
             res.status(401).send('Unauthorized : Format is Authorization: Bearer [token]');
