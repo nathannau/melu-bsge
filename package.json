@@ -8,7 +8,10 @@
     "start": "node index.js",
     "_build-admin-js": "browserify --debug -t [ stringify ] src/admin/main.js > public/admin/index.js",
     "_build-admin-copy": "copyfiles -f src/admin/style.css src/admin/index.html node_modules/highlight.js/styles/vs2015.css public/admin",
-    "build-admin": "npm run _build-admin-js && npm run _build-admin-copy"
+    "build-admin": "npm run _build-admin-js && npm run _build-admin-copy",
+    "_build-manager-js": "browserify --debug -t [ stringify ] src/manager/main.js > public/manager/index.js",
+    "_build-manager-copy": "copyfiles -f src/manager/style.css src/manager/index.html public/manager",
+    "build-manager": "npm run _build-manager-js && npm run _build-manager-copy"
   },
   "author": "Nathan",
   "license": "ISC",

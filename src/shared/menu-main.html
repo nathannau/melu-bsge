@@ -1,0 +1,5 @@
+<ul class="menu-main">
+    <li v-for="route in routes">
+        <a :href="'#' + route.paths[0]" :class="{active:route.paths.includes(currentRoute)}">{{ route.label }}</a>
+    </li>
+</ul>

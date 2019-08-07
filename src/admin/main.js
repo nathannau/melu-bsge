@@ -7,12 +7,12 @@ var { ApiError, ApiUnauthorizedError } = require('./Api');
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 
 require('./login');
-require('./overlay');
+require('../shared/overlay');
 require('./home');
 require('./controles');
 require('./consoles');
 require('./gestionnaires');
-require('./menu-main');
+require('../shared/menu-main');
 require('./input-number');
 
 //console.log(Vue.config.errorHandler);
@@ -29,20 +29,28 @@ Vue.config.errorHandler = function (err, vm, info) {
     throw err;
 }
 
-const routes = {
-    '': 'home',
-    'home': 'home',
-    'login': 'login',
-    'controle': 'controles',
-    'console': 'consoles',
-    'gestionnaire' : 'gestionnaires',
-}
+const routes = [
+    { paths: ['home',''],      label: 'Home',         controler: 'home', },
+    { paths: ['controle'],     label: 'Controles',    controler: 'controles', },
+    { paths: ['console'],      label: 'Consoles',     controler: 'consoles', },
+    { paths: ['gestionnaire'], label: 'Gestionnaire', controler: 'gestionnaires', },
+    { paths: ['login'],        label: 'Connexion',    controler: 'login', },
+];
+var routesControler = {};
+routes.forEach(route=>{
+    route.paths.forEach(path=>{
+        routesControler[path] = route.controler;
+    });
+});
+
 var app = new Vue({
     el: '#app',
     data: {
         currentUrl: window.location.hash,
         currentHash: '',
-        currentArgs: {}
+        currentArgs: {},
+        routes: routes,
+        routesControler: routesControler,
     },
     watch: {
         currentUrl: {
@@ -56,17 +64,11 @@ var app = new Vue({
     },
     computed: {
         mainView() {
-            return routes[this.currentHash] || NotFound;
+            return this.routesControler[this.currentHash] || NotFound;
         }
     },
-    methods: {
-        // login: function() {
-        //     api.login(this.pwd);
-        // },
-        // test: function() {
-        //     api.test();
-        // }
-    },
+    // methods: {
+    // },
     template: require('./main.html')
 })
 window.addEventListener('popstate', () => {
