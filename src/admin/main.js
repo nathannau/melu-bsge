@@ -2,7 +2,7 @@
 
 var Vue = require('vue');
 var qs = require('querystringify');
-var { ApiError, ApiUnauthorizedError } = require('./Api');
+var { ApiError, ApiUnauthorizedError } = require('./api');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 

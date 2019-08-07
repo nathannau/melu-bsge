@@ -1,7 +1,7 @@
 'use strict';
 
 var Vue = require('vue');
-var { api } = require('./Api');
+var { api } = require('./api');
 require('./console');
 
 module.exports = Vue.component('consoles', { 
