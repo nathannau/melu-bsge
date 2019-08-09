@@ -11,7 +11,7 @@ require('../shared/overlay');
 require('./home');
 // require('./controles');
 // require('./consoles');
-// require('./gestionnaires');
+require('./gestionnaire');
 require('../shared/menu-main');
 // require('./input-number');
 
@@ -48,6 +48,11 @@ var app = new Vue({
         this.routes.splice(0, this.routes.length, ...routes);
         if (DEBUG)  this.loadGestionnaires();
     },
+    // provide: function() {
+    //     return {
+    //         urlArgs: this.currentArgs,
+    //     }
+    // },
     watch: {
         currentUrl: {
             immediate: true,
@@ -66,18 +71,30 @@ var app = new Vue({
         },
     },
     computed: {
-        mainView() {
-            return this.routesControler[this.currentHash] || NotFound;
+        // mainView() {
+        //     return this.routesControler[this.currentHash] || NotFound;
+        // },
+        mainViewProps() {
+            var index = this.routes.findIndex(route=>{ return route.paths.includes(this.currentHash); });
+            if (index<0) 
+                return { is:NotFound };
+            else {
+                var route = this.routes[index];
+                return Object.assign({
+                    is: route.controler,
+                    key: route.paths[0]
+                }, route.props);
+            }
         },
-        routesControler() {
-            var ret = {};
-            this.routes.forEach(route=>{
-                route.paths.forEach(path=>{
-                    ret[path] = route.controler;
-                });
-            });
-            return ret;
-        },
+        // routesControler() {
+        //     var ret = {};
+        //     this.routes.forEach(route=>{
+        //         route.paths.forEach(path=>{
+        //             ret[path] = route.controler;
+        //         });
+        //     });
+        //     return ret;
+        // },
     },
     methods: {
         loadGestionnaires: async function() {
@@ -85,7 +102,11 @@ var app = new Vue({
             var newRoutes = [];
             var gestionnaires = await api.getGestionnaires();
             gestionnaires.forEach(gestionnaire=>{
-                newRoutes.push({ paths: ['manager'], label: gestionnaire.libelle, controler: 'manager', arguments: { id: gestionnaire.gestionnaireId } });
+                newRoutes.push({ 
+                    paths: ['gestionnaire_' + gestionnaire.gestionnaireId], 
+                    label: gestionnaire.libelle, 
+                    controler: 'gestionnaire', 
+                    props: { gestionnaireId: gestionnaire.gestionnaireId } });
             });
             this.routes.splice(1, this.routes.length-2, ...newRoutes);
             this.routesLoaded = true;

@@ -2,5 +2,5 @@
     <overlay />
     <header>La mélusine</header>
     <nav><menu-main :currentRoute="currentHash" :routes="routes"></menu-main></nav>
-    <main><component v-bind:is="mainView "></component></main>
+    <main><component v-bind="mainViewProps"></component></main>
 </div>

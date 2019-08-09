@@ -142,18 +142,21 @@ module.exports = function() {
                 });
         })
         .get('/gestionnaires/:id/controles', hasRule('manager'), async function(req, res) {
-            console.log('GET /gestionnaires/:id');
+            console.log('GET /gestionnaires/:id/controles');
 
             var data = await gameConfig.getGestionnaire(req.params.id);
             if (data==undefined)
                 res.status(404).send('gestionnaire not found');
             else {
                 var config = JSON.parse(data.config);
-                datas = [];
-                config.controles.forEach(async controleId=>{
-                    data = await gameConfig.getControle(controleId);
-                    datas.push(data);
-                });
+
+                datas = await Promise.all(
+                    config.controles.map(controleId=>{
+                        return controleId==='' ?
+                            new Promise(r=>{r(null)}) :
+                            gameConfig.getControle(controleId);
+                    })
+                );
 
                 res.json({ 
                     status: "success",
