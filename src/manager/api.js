@@ -79,44 +79,6 @@ class Api {
         return !!this.token;
     }
 
-    // async getControles() {
-    //     var rep = await this._asyncCall('GET', `/api/manager/controles`);
-    //     return rep.datas
-    // }
-    // async getControle(id) {
-    //     var rep = await this._asyncCall('GET', `/api/manager/controles/${id}`);
-    //     return rep.data
-    // }
-    // // async addControle(controle) {
-    // //     var rep = await this._asyncCall('POST', `/api/manager/controles`, controle);
-    // //     return rep.id
-    // // }
-    // async setControle(id, controle) {
-    //     await this._asyncCall('POST', `/api/manager/controles/${id}`, controle);
-    // }
-    // async removeControle(id) {
-    //     await this._asyncCall('DELETE', `/api/manager/controles/${id}`);
-    // }
-
-    // async getConsoles() {
-    //     var rep = await this._asyncCall('GET', `/api/manager/consoles`);
-    //     return rep.datas
-    // }
-    // async getConsole(id) {
-    //     var rep = await this._asyncCall('GET', `/api/manager/consoles/${id}`);
-    //     return rep.data
-    // }
-    // // async addConsole(console) {
-    // //     var rep = await this._asyncCall('POST', `/api/manager/consoles`, console);
-    // //     return rep.id
-    // // }
-    // async setConsole(id, console) {
-    //     await this._asyncCall('POST', `/api/manager/consoles/${id}`, console);
-    // }
-    // async removeConsole(id) {
-    //     await this._asyncCall('DELETE', `/api/manager/consoles/${id}`);
-    // }
-
     async getGestionnaires() {
         var rep = await this._asyncCall('GET', `/api/manager/gestionnaires`);
         return rep.datas
@@ -125,21 +87,6 @@ class Api {
         var rep = await this._asyncCall('GET', `/api/manager/gestionnaires/${id}/controles`);
         return rep.datas
     }
-    // async getGestionnaire(id) {
-    //     var rep = await this._asyncCall('GET', `/api/manager/gestionnaires/${id}`);
-    //     return rep.data
-    // }
-    // async addGestionnaire(gestionnaire) {
-    //     var rep = await this._asyncCall('POST', `/api/manager/gestionnaires`, gestionnaire);
-    //     return rep.id
-    // }
-    // async setGestionnaire(id, gestionnaire) {
-    //     await this._asyncCall('POST', `/api/manager/gestionnaires/${id}`, gestionnaire);
-    // }
-    // async removeGestionnaire(id) {
-    //     await this._asyncCall('DELETE', `/api/manager/gestionnaires/${id}`);
-    // }
-
 }
 
 

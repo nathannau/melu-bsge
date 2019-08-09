@@ -15,7 +15,6 @@ require('./gestionnaire');
 require('../shared/menu-main');
 // require('./input-number');
 
-//console.log(Vue.config.errorHandler);
 Vue.config.errorHandler = function (err, vm, info) {
     if (err instanceof ApiUnauthorizedError) {
         console.log('redirect to login', err)
@@ -48,11 +47,6 @@ var app = new Vue({
         this.routes.splice(0, this.routes.length, ...routes);
         if (DEBUG)  this.loadGestionnaires();
     },
-    // provide: function() {
-    //     return {
-    //         urlArgs: this.currentArgs,
-    //     }
-    // },
     watch: {
         currentUrl: {
             immediate: true,
@@ -71,9 +65,6 @@ var app = new Vue({
         },
     },
     computed: {
-        // mainView() {
-        //     return this.routesControler[this.currentHash] || NotFound;
-        // },
         mainViewProps() {
             var index = this.routes.findIndex(route=>{ return route.paths.includes(this.currentHash); });
             if (index<0) 
@@ -86,15 +77,6 @@ var app = new Vue({
                 }, route.props);
             }
         },
-        // routesControler() {
-        //     var ret = {};
-        //     this.routes.forEach(route=>{
-        //         route.paths.forEach(path=>{
-        //             ret[path] = route.controler;
-        //         });
-        //     });
-        //     return ret;
-        // },
     },
     methods: {
         loadGestionnaires: async function() {
