@@ -1,0 +1,11 @@
+<div>
+    <template v-if="config.minimum!==null && config.maximum!==null && config.step!==null">
+        <input type="range" v-bind:min="config.minimum" v-bind:max="config.maximum" 
+            v-bind:step="config.step" v-bind:value="value" 
+            v-on:input="$emit('input', $event.target.value)" /> {{ value }}
+    </template>
+    <input-number v-else v-bind:min="config.minimum" v-bind:max="config.maximum" 
+        v-bind:step="config.step" v-bind:value="value" 
+        v-on:input="$emit('input', $event.target.value)" />
+    <br/>
+</div>

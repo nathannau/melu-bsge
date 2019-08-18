@@ -13,7 +13,7 @@ require('./controles');
 require('./consoles');
 require('./gestionnaires');
 require('../shared/menu-main');
-require('./input-number');
+require('../shared/input-number');
 
 //console.log(Vue.config.errorHandler);
 Vue.config.errorHandler = function (err, vm, info) {

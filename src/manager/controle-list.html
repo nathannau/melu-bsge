@@ -1,0 +1,13 @@
+<div>
+    <template v-for="(value, key) in config.values">
+        <div v-if="config.multiple">
+            <input type="checkbox" v-model="currentValue"
+                v-bind:value="key" /> {{ value }}
+        </div>
+        <div v-else>
+            <input type="radio" v-model="currentValue" 
+                v-bind:name="'list_'+_uid" v-bind:value="key" /> 
+                {{ value }}
+        </div>
+    </template>
+</div>

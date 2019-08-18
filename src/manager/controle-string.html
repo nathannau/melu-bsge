@@ -1,0 +1,5 @@
+<div>
+    <input v-if="config.lenMax" v-bind:value="memValue" v-on:input="$emit('input', $event.target.value)"
+        type="text" v-bind:maxlength="config.lenMax" />
+    <textarea v-else v-bind:value="value" v-on:input="$emit('input', $event.target.value)"></textarea>
+</div>

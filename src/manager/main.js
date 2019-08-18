@@ -3,17 +3,16 @@
 var Vue = require('vue');
 var qs = require('querystringify');
 var { ApiError, ApiUnauthorizedError, api } = require('./api');
+var VueMqtt = require('vue-mqtt').default;
+var ClientName = require('../shared/client-name');
 
 const NotFound = { template: '<p class="status404">Page not found</p>' };
 
 require('./login');
 require('../shared/overlay');
 require('./home');
-// require('./controles');
-// require('./consoles');
 require('./gestionnaire');
 require('../shared/menu-main');
-// require('./input-number');
 
 Vue.config.errorHandler = function (err, vm, info) {
     if (err instanceof ApiUnauthorizedError) {
@@ -27,6 +26,14 @@ Vue.config.errorHandler = function (err, vm, info) {
 
     throw err;
 }
+
+
+Vue.use(
+    VueMqtt, `mqtt://${window.location.hostname}:8883`, 
+    { clientId: ClientName.getName({
+        prefix:'mng_'}),
+    }
+);
 
 const routes = [
     { paths: ['home',''],      label: 'Home',         controler: 'home' },
@@ -45,6 +52,9 @@ var app = new Vue({
     },
     mounted: function() {
         this.routes.splice(0, this.routes.length, ...routes);
+        // this.$mqtt.on('connect', function(p) {
+        //     console.log('connected', p, arguments);
+        // });
         if (DEBUG)  this.loadGestionnaires();
     },
     watch: {
@@ -73,7 +83,8 @@ var app = new Vue({
                 var route = this.routes[index];
                 return Object.assign({
                     is: route.controler,
-                    key: route.paths[0]
+                    key: route.paths[0],
+                    label: route.label,
                 }, route.props);
             }
         },

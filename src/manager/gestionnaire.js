@@ -2,10 +2,12 @@
 
 var Vue = require('vue');
 var { api } = require('./api');
+require('./controle');
 
 module.exports = Vue.component('gestionnaire', { 
     template: require('./gestionnaire.html'),
     props: {
+        label: String,
         gestionnaireId: Number,
     },
     data: function() { return {
@@ -17,11 +19,11 @@ module.exports = Vue.component('gestionnaire', {
         var controles = await api.getGestionnaireControles(this.gestionnaireId);
         controles.forEach(controle => { 
             if (controle) 
-                controle.config = JSON.parse(controle.config); 7
+                controle.config = JSON.parse(controle.config);
         });
 
         this.controles.splice(0, this.controles.length, ...controles);
-        console.log(this.controles);
+        // console.log(this.controles);
         this.$hideLoading();
     },
 });
