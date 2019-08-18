@@ -1,4 +1,5 @@
 <div>
     <h2>{{ libelle }}</h2>
     <component v-bind:is="subComponent" v-bind:config="config" v-model="value" />
+    <button v-bind:disabled="value==actualValue" v-on:click="send">Appliquer</button>
 </div>

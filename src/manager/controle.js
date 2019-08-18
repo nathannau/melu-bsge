@@ -21,22 +21,33 @@ module.exports = Vue.component('controle', {
         libelle: String,
         config: Object,
         defaultValue: String,
+        controleId: String,
     },
     data: function() { return {
-        value: 'this.defaultValue',
+        value: null,
+        actualValue: null,
     }},
     mounted: function() {
-        this.value = this.defaultValue;
+        this.$mqtt.subscribe(`game/controls/${this.controleId}`, {});
+    },
+    beforeDestroy: function() {
+        this.$mqtt.unsubscribe(`game/controls/${this.controleId}`);
+    },
+    mqtt: {
+        'game/controls/#': function(data, topic) {
+            if (topic!=`game/controls/${this.controleId}`) return;
+            console.log(`game/controls/${this.controleId} : `, data.toString());
+            this.actualValue = this.value = data.toString();
+        },
     },
     computed: {
         subComponent: function() { return types[this.type] || invalidType; },
     },
-    watch: {
-        value: function(value) { 
-            console.log('watch value', arguments);
-
-            // this.$emit('input', value);
-        },
+    methods: {
+        send: function() {
+            this.$mqtt.publish(`game/controls/${this.controleId}`, this.value, { retain: true});
+            this.actualValue = this.value;
+        }
     },
 });
 

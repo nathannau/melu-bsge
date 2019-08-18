@@ -17,6 +17,9 @@
                 client.subscribe('game/clients/#', { }, function(err, granted) { 
                     console.log('game/clients : ', err, granted);
                 })
+                client.subscribe('game/controls/#', { }, function(err, granted) { 
+                    console.log('game/controls : ', err, granted);
+                })
             })
             
             client.on('message', function (topic, message) {

@@ -10,7 +10,10 @@ module.exports = Vue.component('controle-list', {
     },
     computed: {
         currentValue: {
-            get: function() { return this.config.multiple ? this.value.split(';') : this.value; },
+            get: function() { 
+                var val = this.value || "";
+                return this.config.multiple ? val.split(';') : val; 
+            },
             set: function(val) {
                 if (this.config.multiple) {
                     val = val.filter(el=>{ return el; });
