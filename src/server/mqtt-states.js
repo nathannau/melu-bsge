@@ -64,6 +64,20 @@ class States {
         });
     }
 
+    async getControles() {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.all(`SELECT * FROM controle`, (err, rows) => { resolve(rows) })
+        });
+    }
+
+    async setControle(controleId, value) {
+        await this.waitInit();
+        return new Promise(resolve=>{
+            this.db.run(`REPLACE INTO controle(controleId, value) VALUES(?, ?)`, [controleId, value], (result, err) => { resolve });
+        });
+    }
+
 }
 
 module.exports = States;
