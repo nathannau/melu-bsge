@@ -34,7 +34,7 @@ class States {
                     controleId TEXT PRIMARY KEY,
                     value TEXT
                 )`)
-                .run(`SELECT 1`, ()=>{resolve();})
+                .run('SELECT 1', ()=>{resolve();})
             ;
         })});
     }
@@ -53,28 +53,31 @@ class States {
     async getClients() {
         await this.waitInit();
         return new Promise(resolve=>{
-            this.db.all(`SELECT * FROM client`, (err, rows) => { resolve(rows) })
+            this.db.all('SELECT * FROM client', (err, rows) => { resolve(rows) })
         });
     }
 
     async setClient(clientId, consoleId) {
         await this.waitInit();
         return new Promise(resolve=>{
-            this.db.run(`REPLACE INTO client(clientId, console) VALUES(?, ?)`, [clientId, consoleId], (result, err) => { resolve });
+            this.db.run('REPLACE INTO client(clientId, console) VALUES(?, ?)', [clientId, consoleId], (result, err) => { resolve });
         });
     }
 
     async getControles() {
         await this.waitInit();
         return new Promise(resolve=>{
-            this.db.all(`SELECT * FROM controle`, (err, rows) => { resolve(rows) })
+            this.db.all('SELECT * FROM controle', (err, rows) => { resolve(rows) })
         });
     }
 
     async setControle(controleId, value) {
         await this.waitInit();
         return new Promise(resolve=>{
-            this.db.run(`REPLACE INTO controle(controleId, value) VALUES(?, ?)`, [controleId, value], (result, err) => { resolve });
+            if (value!='')
+                this.db.run('REPLACE INTO controle(controleId, value) VALUES(?, ?)', [controleId, value], (result, err) => { resolve });
+            else
+                this.db.run('DELETE FROM `controle` WHERE controleId = ?', [controleId], (result, err) => { resolve });
         });
     }
 

@@ -79,6 +79,10 @@ class Api {
         return !!this.token;
     }
 
+    async startGame() {
+        await this._asyncCall('GET', `/api/admin/game/start`);
+    }
+
     async getConfig() {
         var rep = await this._asyncCall('GET', `/api/admin/config`);
         return rep.data

@@ -3,6 +3,7 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var fs = require('fs');
 var gameConfig = new (require('./game-config'))('./db/game.db');
+var topicParse = require('../shared/topic-parse');
 
 const CONFIG_FILE = 'config-admin.json';
 function getConfig()
@@ -63,7 +64,12 @@ function hasRule(rules) {
     };
 }
 
-module.exports = function() {
+module.exports = function(mqttServer) {
+    var gameTopics = { };
+    mqttServer.on('published', function(packet, client) {
+        if (topicParse('game/#', packet.topic))
+            gameTopics[packet.topic] = !!packet.payload;
+    });
 
     return express.Router()
         .use(express.json({'limit':'5120kb'}))
@@ -94,6 +100,36 @@ module.exports = function() {
             console.log('POST /config');
 
             await gameConfig.import(req.body);
+            res.json({ 
+                status: "success",
+            });
+        })
+        // Partie
+        .get('/game/start', hasRule('admin'), async function(req, res) {
+            console.log('GET /game/start');
+
+            Object.keys(gameTopics).forEach(function(topic){
+                if (gameTopics[topic])
+                    mqttServer.publish({
+                        topic: topic,
+                        payload: [],
+                        qos: 0,
+                        retain: true
+                    });
+            });
+
+            var controles = await gameConfig.getControles();
+            controles.forEach(controle=>{
+                console.log(controle.controleId, controle.defaultValue);
+                mqttServer.publish({
+                    topic: `game/controls/${controle.controleId}`,
+                    payload: controle.defaultValue,
+                    qos: 0,
+                    retain: true
+                });
+            })
+
+
             res.json({ 
                 status: "success",
             });

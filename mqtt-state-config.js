@@ -24,7 +24,7 @@ module.exports = function(server, state)
                 topic: `game/clients/${client.clientId}`,
                 payload: JSON.stringify(client.console),
                 qos: 0,
-                retain: true
+                retain: true,
             })
         });
     });
@@ -35,17 +35,19 @@ module.exports = function(server, state)
                 topic: `game/controls/${controle.controleId}`,
                 payload: controle.value,
                 qos: 0,
-                retain: true
+                retain: true,
             })
         });
     });
     
     subscribe(server, 'game/controls/+', function(packet, client, parts, topic) {
-        if (!client) return;
-        console.log(`Controle(${parts[0]}) = ${packet.payload.toString()}`);
+        // console.log(packet, !client);
+        if (!packet.retain) return;
+        //if (!client) return;
+        console.log(`Controle(${parts[0]}) <= ${packet.payload.toString()}`);
         state.setControle(parts[0], packet.payload.toString());
     })
-    
+
     // server.on('published', function(packet, client) {
     //     console.log(packet, packet.payload.toString(), !!client);
     // });

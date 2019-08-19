@@ -1,6 +1,6 @@
 'use strict'; 
 
-module.exports = function() {
+module.exports = function(mqttServer) {
     /* Init Serveur de fichier */
     var express = require('express');
     var apiAdmin = require('./api-admin');
@@ -8,7 +8,7 @@ module.exports = function() {
 
     var app = express();
     app.use(express.static(__dirname + '/../../public'))
-    app.use('/api/admin', apiAdmin())
+    app.use('/api/admin', apiAdmin(mqttServer))
     app.use('/api/manager', apiManager())
     app.listen(8080);
 

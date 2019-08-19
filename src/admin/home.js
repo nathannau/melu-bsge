@@ -52,13 +52,35 @@ module.exports = Vue.component('home', {
                 that.$hideLoading();
                 that.$openAlert({
                     title:'Restauration', 
-                    message:'Configuration restaurée avec succès', 
+                    message:'Configuration restaurée avec succès. N\'oubliez de commencer la partie pour réinitialiser les valeurs par défauts', 
                     timeout:2000})
             }
             inputFile[0].click();
             inputFile.remove();
 
         },
+        start: async function() {
+            var that = this;
+            var ask = new Promise(function(resolve) {
+                that.$openAsk({
+                    title:'Commencer une partie', 
+                    message:'Attention, cette opération va réinitialiser la partie en cours.', 
+                    buttons: {
+                        'cancel': 'Annuler',
+                        'confirm': 'Continuer',
+                    },
+                    onselect: resolve
+                });
+            });
+            if ((await ask) != 'confirm') return;
 
+            await api.startGame();
+
+            this.$openAlert({
+                title:'Commencer une partie', 
+                message:'Nouvelle partie initialisée', 
+                timeout:2000})
+
+        },
     },
 });

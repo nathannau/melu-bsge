@@ -14,6 +14,7 @@ module.exports = function(pattern, topic) {
         if (pat=='#') {
             if (pattern.length) return null;
             ret.push(topic.join('/'));
+            topic = [];
             break;
         } else if (pat=='+') {
             if (!topic.length) return null;

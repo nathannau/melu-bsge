@@ -1,7 +1,7 @@
 'use strict'; 
 
 var mqttServer = require('./src/server/mqtt')();
-var expressServer = require('./src/server/httpd')();
+var expressServer = require('./src/server/httpd')(mqttServer);
 
 /* SQLite */
 //var sqlite = require('sqlite3');
