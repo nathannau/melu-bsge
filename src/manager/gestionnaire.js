@@ -12,6 +12,7 @@ module.exports = Vue.component('gestionnaire', {
     },
     data: function() { return {
         controles: [],
+        bus: new Vue(),
     }},
     mounted: async function() {
         this.$showLoading();

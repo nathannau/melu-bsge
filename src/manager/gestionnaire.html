@@ -2,11 +2,12 @@
     <h1>{{ label }}</h1>
     <div v-for="(controle, index) in controles">
         <template v-if="controle">
-            <controle v-bind="controle" />
+            <controle v-bind="controle" v-bind:bus="bus" />
             <!-- v-on:input="controles.splice(index,1,$event)"  -->
             <!-- :key="itemKey(item)" -->
         </template>
         <hr v-else />
     </div>
+    <button v-on:click="bus.$emit('saveAll')">Appliquer tout</button>
 </div>
     

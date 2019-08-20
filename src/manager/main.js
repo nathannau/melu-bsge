@@ -11,6 +11,7 @@ const NotFound = { template: '<p class="status404">Page not found</p>' };
 require('./login');
 require('../shared/overlay');
 require('./home');
+require('./clients');
 require('./gestionnaire');
 require('../shared/menu-main');
 
@@ -35,8 +36,9 @@ Vue.use(
     }
 );
 
-const routes = [
+const baseRoutes = [
     { paths: ['home',''],      label: 'Home',         controler: 'home' },
+    { paths: ['assign'],       label: 'Client',       controler: 'clients' },
     { paths: ['login'],        label: 'Connexion',    controler: 'login' },
 ];
 const resetPaths = ['login'];
@@ -51,7 +53,7 @@ var app = new Vue({
         routesLoaded: false,
     },
     mounted: function() {
-        this.routes.splice(0, this.routes.length, ...routes);
+        this.routes.splice(0, this.routes.length, ...baseRoutes);
         // this.$mqtt.on('connect', function(p) {
         //     console.log('connected', p, arguments);
         // });
@@ -66,7 +68,7 @@ var app = new Vue({
                 this.currentArgs = (parts.length>1) ? qs.parse(parts[1]) : {};
                 if (resetPaths.includes(this.currentHash))
                 {
-                    this.routes.splice(0, this.routes.length, ...routes);
+                    this.routes.splice(0, this.routes.length, ...baseRoutes);
                     this.routesLoaded = false;
                 }
                 if (!this.routesLoaded && api.hasToken())
@@ -101,7 +103,8 @@ var app = new Vue({
                     controler: 'gestionnaire', 
                     props: { gestionnaireId: gestionnaire.gestionnaireId } });
             });
-            this.routes.splice(1, this.routes.length-2, ...newRoutes);
+            this.routes.splice(0, this.routes.length, ...baseRoutes);
+            this.routes.splice(2, 0, ...newRoutes);
             this.routesLoaded = true;
             this.$hideLoading();
         },

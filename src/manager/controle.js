@@ -5,6 +5,7 @@ require('./controle-string');
 require('./controle-numeric');
 require('./controle-bool');
 require('./controle-list');
+var topicParse = require('../shared/topic-parse')
 
 const types = {
     string: 'controle-string',
@@ -22,6 +23,7 @@ module.exports = Vue.component('controle', {
         config: Object,
         defaultValue: String,
         controleId: String,
+        bus: Object,
     },
     data: function() { return {
         value: null,
@@ -29,13 +31,17 @@ module.exports = Vue.component('controle', {
     }},
     mounted: function() {
         this.$mqtt.subscribe(`game/controls/${this.controleId}`, {});
+        this.bus.$on('saveAll', ()=>{
+            if (this.actualValue != this.value) 
+                this.send();
+        });
     },
     beforeDestroy: function() {
         this.$mqtt.unsubscribe(`game/controls/${this.controleId}`);
     },
     mqtt: {
         'game/controls/#': function(data, topic) {
-            if (topic!=`game/controls/${this.controleId}`) return;
+            if (!topicParse(`game/controls/${this.controleId}`, topic)) return;
             console.log(`game/controls/${this.controleId} : `, data.toString());
             this.actualValue = this.value = data.toString();
         },
