@@ -26,13 +26,14 @@ module.exports = Vue.component('clients', {
         'game/clients/+/console': function(data, topic) {
             var parts = topicParse('game/clients/+/console', topic);
             var clientId = parts[0];
+            console.log(topic, data);
 
             data = data.toString();
             if (!data.length) {
                 Vue.delete(this.clients, clientId);
                 return;
             } else {
-                Vue.set(this.clients, clientsId, data)
+                Vue.set(this.clients, clientId, data)
             }
             this.actualValue = this.value = data.toString();
         },

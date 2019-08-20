@@ -1,7 +1,5 @@
 'use strict';
 
-const CLIENT_NAME = 'client-name';
-
 module.exports = function(pattern, topic) {
     if (!Array.isArray(pattern)) pattern = pattern.split('/');
     if (!Array.isArray(topic)) topic = topic.split('/');
