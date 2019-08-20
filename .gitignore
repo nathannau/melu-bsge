@@ -8,5 +8,7 @@
 
 /public/admin/*
 !/public/admin/.gitkeep
+/public/client/*
+!/public/client/.gitkeep
 /public/manager/*
 !/public/manager/.gitkeep

@@ -11,7 +11,10 @@
     "build-admin": "npm run _build-admin-js && npm run _build-admin-copy",
     "_build-manager-js": "browserify --debug -t [ stringify ] src/manager/main.js > public/manager/index.js",
     "_build-manager-copy": "copyfiles -f src/manager/style.css src/manager/index.html public/manager",
-    "build-manager": "npm run _build-manager-js && npm run _build-manager-copy"
+    "build-manager": "npm run _build-manager-js && npm run _build-manager-copy",
+    "_build-client-js": "browserify --debug -t [ stringify ] src/client/main.js > public/client/index.js",
+    "_build-client-copy": "copyfiles -f src/client/index.html public/client",
+    "build-client": "npm run _build-client-js && npm run _build-client-copy"
   },
   "author": "Nathan",
   "license": "ISC",
