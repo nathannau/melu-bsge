@@ -39,7 +39,8 @@
                 // client.publish('game/clients/test_cli/console', JSON.stringify("toto"), { retain: true, qos: 0 }, function(err) { console.log(err) })
                 // client.publish('game/clients/test_cli', JSON.stringify({action:'goodbye'}), { retain: !true, qos: 0 }, function(err) { console.log(err) })
                 // client.publish('game/clients/client_e9xemevylpv', JSON.stringify({action:'reset-id'}), { retain: !true, qos: 0 }, function(err) { console.log(err) })
-                client.publish('game/clients/client_f55f0ikgxg8', JSON.stringify({action:'identify', duration:10000}), { retain: !true, qos: 0 }, function(err) { console.log(err) })
+                // client.publish('game/clients/client_f55f0ikgxg8', JSON.stringify({action:'identify', duration:10000}), { retain: !true, qos: 0 }, function(err) { console.log(err) })
+                client.publish('game/clients/client_f55f0ikgxg8/console', JSON.stringify("yep"), { retain: !true, qos: 0 }, function(err) { console.log(err) })
                 
             }
         </script>

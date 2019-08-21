@@ -1,0 +1,15 @@
+<div>
+    <h2>Client {{ clientId }}</h2>
+    <label>
+        Console : 
+        <select v-model="currentConsole">
+            <option v-bind:value="null">---</option>
+            <option v-for="{ consoleId, libelle, type } in consoles" v-bind:value="consoleId">{{ libelle }} ({{ labelTypes[type] }})</option>
+        </select>
+    </label><br/>
+    <button v-on:click="identify">Identifier</button> <br/>
+    <button v-on:click="reset">Régénérer l'identifiant</button> <br/>
+    <button v-on:click="ping">Ping</button> {{ pingDelay }} <br/>
+    <button v-on:click="remove">Supprimer</button> <br/>
+</div>
+    

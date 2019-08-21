@@ -165,5 +165,16 @@ module.exports = function() {
 
             }
         })
+        // Consoles
+        .get('/consoles', hasRule('admin'), async function(req, res) {
+            console.log('GET /consoles');
 
+            var datas = await gameConfig.getConsoles();
+
+            res.json({ 
+                status: "success",
+                datas: datas
+            });
+        })
+    ;
 }

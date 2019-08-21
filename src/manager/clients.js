@@ -2,7 +2,8 @@
 
 var Vue = require('vue');
 var topicParse = require('../shared/topic-parse')
-// var { api } = require('./api');
+var { api } = require('./api');
+require('./client');
 
 module.exports = Vue.component('clients', { 
     template: require('./clients.html'),
@@ -12,9 +13,15 @@ module.exports = Vue.component('clients', {
     // },
     data: function() { return {
         clients: {},
+        consoles: [],
         // clientIds: [],
     }},
-    mounted: function() {
+    provide: function() { return {
+        consoles: this.consoles,
+    }},
+    mounted: async function() {
+        this.consoles.splice(0, this.consoles.length, ... await api.getConsoles());
+        // console.log(this.consoles);
         this.$mqtt.subscribe('game/clients/+/console', {});
         // this.$mqtt.subscribe('game/clients/+', {});
     },
@@ -26,16 +33,16 @@ module.exports = Vue.component('clients', {
         'game/clients/+/console': function(data, topic) {
             var parts = topicParse('game/clients/+/console', topic);
             var clientId = parts[0];
-            console.log(topic, data);
+            // console.log(topic, data);
 
             data = data.toString();
             if (!data.length) {
                 Vue.delete(this.clients, clientId);
                 return;
             } else {
-                Vue.set(this.clients, clientId, data)
+                Vue.set(this.clients, clientId, JSON.parse(data));
             }
-            this.actualValue = this.value = data.toString();
+            this.actualValue = this.value = data;
         },
         // 'game/clients/+': function(data, topic) {
         //     var parts = topicParse('game/clients/+', topic);

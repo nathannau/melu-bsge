@@ -87,6 +87,12 @@ class Api {
         var rep = await this._asyncCall('GET', `/api/manager/gestionnaires/${id}/controles`);
         return rep.datas
     }
+
+    async getConsoles() {
+        var rep = await this._asyncCall('GET', `/api/manager/consoles`);
+        return rep.datas
+    }
+
 }
 
 

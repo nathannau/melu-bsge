@@ -31,9 +31,10 @@ $(function(){
             `game/clients/${clientId}/#`
         ], { });
 
-        client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: !true, qos: 0 }/*, function(err) { console.log(err) }*/)
-    })
+        client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: false, qos: 0 })
+    });
 
+    var currentConsoleId = null;
     client.on('message', function (topic, message) {
         // message is Buffer
         var data = message.toString();
@@ -41,14 +42,24 @@ $(function(){
 
         dispatchMqtt(topic, {
             'game/clients/+/console': parts=>{
+                if (!data.length) { // Tentative de suppression
+                    client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: false, qos: 0 })
+                    return;
+                }
+                if (currentConsoleId!=null) { // Si une console est déja affichée
+                    window.location.reload();
+                    return;
+                }
                 let consoleId = JSON.parse(data);
                 console.log('Afficher console :', consoleId);
+
+                currentConsoleId = consoleId;
                 if (consoleId==null) {
                     let content = require('./fullIdentity.html');
                     content = eval('`'+content+'`');
                     $('body').html(content);
                 } else {
-
+                    // currentConsoleId = consoleId;
                 }
 
 
@@ -61,7 +72,8 @@ $(function(){
                         client.publish(`game/clients/${_clientId}`, JSON.stringify({action:'pong'}), { retain: false, qos: 0 })
                     break;
                     case 'reset-id':
-                        var clientId = clientName.reset();
+                        client.publish(`game/clients/${_clientId}`, JSON.stringify({action:'goodbye'}), { retain: false, qos: 0 })
+                        clientName.reset();
                     break;
                     case 'identify':
                         console.log('identify clientId :', _clientId)

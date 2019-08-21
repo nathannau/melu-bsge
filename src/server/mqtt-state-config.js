@@ -49,14 +49,13 @@ module.exports = function(server, state)
     })
 
     subscribe(server, 'game/clients/+', async function(packet, client, parts, topic) {
-        console.log(packet, packet.payload.toString());
+        // console.log(packet, packet.payload.toString());
         var clientId = parts[0];
         
         try {
             var data = JSON.parse(packet.payload.toString());
             switch (data.action.toLowerCase()) {
                 case 'hello':
-                    console.log('HELLO !!!!')
                     if (!await state.getClient(clientId))
                         server.publish({
                             topic: `game/clients/${clientId}/console`,
@@ -80,7 +79,7 @@ module.exports = function(server, state)
     })
 
     subscribe(server, 'game/clients/+/console', function(packet, client, parts, topic) {
-        console.log(packet, !client);
+        // console.log(packet, !client);
         if (!packet.retain) return;
         //if (!client) return;
         console.log(`Client(${parts[0]}) <= ${packet.payload.toString()}`);
