@@ -41,7 +41,7 @@ $(function(){
         var _clientId = clientId;
 
         dispatchMqtt(topic, {
-            'game/clients/+/console': parts=>{
+            'game/clients/+/console': async parts=>{
                 if (!data.length) { // Tentative de suppression
                     client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: false, qos: 0 })
                     return;
@@ -59,6 +59,18 @@ $(function(){
                     content = eval('`'+content+'`');
                     $('body').html(content);
                 } else {
+                    var asyncAjax = new Promise(resolve=>{
+                        $.ajax({
+                            success: resolve,
+                            url: `/client/${consoleId}/index.html`,
+                            method: 'GET',
+                            dataType: 'html',
+                        })
+                    });
+                    let content = await asyncAjax;
+                    content = $(content);
+                    // content = $(`<div>${content}</div>`);
+                    console.log(content);
                     // currentConsoleId = consoleId;
                 }
 

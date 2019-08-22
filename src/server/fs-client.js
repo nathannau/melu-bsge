@@ -26,13 +26,12 @@ module.exports = function() {
                     case 'style.css' : contentType='text/css'; content = files.css; break;
                     default:
                         var index = files.images.findIndex(img=>{ return img.filename==req.params.file; });
-                        console.log(index);
                         if (index>=0) {
                             contentType = files.images[index].type; 
                             content = Buffer.from(files.images[index].content, 'base64');
                         }
                         else
-                            res.status(404).send('file not found');
+                            res.status(404).send('Error 404 : file not found');
                     break;
                 }
                 if (contentType) {
