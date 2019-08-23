@@ -26,11 +26,7 @@ $(function(){
     client.on('connect', function () {
         console.log('connected');
 
-        client.subscribe([
-            //`game/clients/${clientId}`,
-            `game/clients/${clientId}/#`
-        ], { });
-
+        client.subscribe(`game/clients/${clientId}/#`, { }, function(err, granted) { if (err) console.log(err); });
         client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: false, qos: 0 })
     });
 
