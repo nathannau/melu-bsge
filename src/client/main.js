@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-// var qs = require('querystringify');
+var qs = require('querystringify');
 // var { ApiError, ApiUnauthorizedError, api } = require('./api');
 var mqtt = require('mqtt');
 var clientName = require('../shared/client-name');
@@ -51,14 +51,41 @@ $(function(){
                     return;
                 }
                 let consoleId = JSON.parse(data);
-                console.log('Afficher console :', consoleId);
-
+                console.log('Receive console :', consoleId);
+                var search = qs.parse(window.location.search);
+                if (search.console) {
+                    consoleId = search.console;
+                    console.log('Force console :', consoleId);
+                }
                 currentConsoleId = consoleId;
                 if (consoleId==null) {
                     let content = require('./fullIdentity.html');
                     content = eval('`'+content+'`');
                     $('body').html(content);
                 } else {
+                    var frame = $('<iframe/>')
+                        .attr({src:`/client/${consoleId}/index.html`})
+                        .css({ 
+                            height: '100%', 
+                            width: '100%',
+                            border: 0,
+                            // margin: 0, 
+                            // padding: 0,
+                            display: 'block',
+                        })
+                        .on('load', function() { 
+                            console.log('iframe onload : ');
+                            var innerDocHead = $(frame[0].ownerDocument).find('head');
+                            $('<sript>')
+                                .attr({
+                                    src: 'melu-mqtt.js',
+                                    type: 'text/javascript',
+                                })
+                                .appendTo(innerDocHead);
+                        })
+                        .appendTo('body');
+                    console.log(frame);
+                    /*
                     var asyncAjax = new Promise(resolve=>{
                         $.ajax({
                             success: resolve,
@@ -72,6 +99,7 @@ $(function(){
                     // content = $(`<div>${content}</div>`);
                     console.log(content);
                     // currentConsoleId = consoleId;
+                    */
                 }
 
 
