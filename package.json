@@ -18,9 +18,11 @@
     "build-manager-prod": "npm run _build-manager-js-prod && npm run _build-manager-copy",
     "_build-client-js": "browserify --debug -t [ stringify ] src/client/main.js > public/client/index.js",
     "_build-client-js-prod": "browserify -t [ stringify ] src/client/main.js > public/client/index.js",
+    "_build-client-js-mqtt": "browserify --debug -t [ stringify ] src/client/melu-mqtt.js > public/client/melu-mqtt.js",
+    "_build-client-js-mqtt-prod": "browserify -t [ stringify ] src/client/melu-mqtt.js > public/client/melu-mqtt.js",
     "_build-client-copy": "copyfiles -f src/client/index.html public/client",
-    "build-client": "npm run _build-client-js && npm run _build-client-copy",
-    "build-client-prod": "npm run _build-client-js-prod && npm run _build-client-copy",
+    "build-client": "npm run _build-client-js && npm run _build-client-js-mqtt && npm run _build-client-copy",
+    "build-client-prod": "npm run _build-client-js-prod && npm run _build-client-js-mqtt-prod && npm run _build-client-copy",
     "build": "npm run build-admin && npm run build-client && npm run build-manager",
     "build-prod": "npm run build-admin-prod && npm run build-client-prod && npm run build-manager-prod"
   },

@@ -18,13 +18,13 @@ function dispatchMqtt(topic, actions) {
 }
 
 $(function(){
-    console.log('Start !')
+    // console.log('Start !')
     var clientId = clientName.getName({ prefix:'client_' });
-    console.log('clientId : ', clientId);
+    // console.log('clientId : ', clientId);
 
     var client = mqtt.connect(`mqtt://${window.location.hostname}:8883`)
     client.on('connect', function () {
-        console.log('connected');
+        // console.log('connected');
 
         client.subscribe([
             //`game/clients/${clientId}`,
@@ -51,11 +51,11 @@ $(function(){
                     return;
                 }
                 let consoleId = JSON.parse(data);
-                console.log('Receive console :', consoleId);
+                // console.log('Receive console :', consoleId);
                 var search = qs.parse(window.location.search);
                 if (search.console) {
                     consoleId = search.console;
-                    console.log('Force console :', consoleId);
+                    // console.log('Force console :', consoleId);
                 }
                 currentConsoleId = consoleId;
                 if (consoleId==null) {
@@ -74,39 +74,32 @@ $(function(){
                             display: 'block',
                         })
                         .on('load', function() { 
-                            console.log('iframe onload : ');
-                            var innerDocHead = $(frame[0].ownerDocument).find('head');
-                            $('<sript>')
-                                .attr({
-                                    src: 'melu-mqtt.js',
-                                    type: 'text/javascript',
-                                })
-                                .appendTo(innerDocHead);
+                            // console.log('iframe onload : ');
+                            var innerDocHead = frame.contents().find('head');
+                            innerDocHead.append(`<script type="text/javascript">
+                                var head = document.head;
+                                var s1 = document.createElement('script');
+                                s1.type = 'text/javascript',
+                                s1.src = 'script.js';
+                                var s2 = document.createElement('script');
+                                s2.type = 'text/javascript',
+                                s2.src = '../melu-mqtt.js';
+                                var c1 = document.createElement('link');
+                                c1.rel = 'stylesheet';
+                                c1.href = 'style.css';
+                                head.appendChild(s1);
+                                head.appendChild(s2);
+                                head.appendChild(c1);
+                            </script>`)
                         })
                         .appendTo('body');
-                    console.log(frame);
-                    /*
-                    var asyncAjax = new Promise(resolve=>{
-                        $.ajax({
-                            success: resolve,
-                            url: `/client/${consoleId}/index.html`,
-                            method: 'GET',
-                            dataType: 'html',
-                        })
-                    });
-                    let content = await asyncAjax;
-                    content = $(content);
-                    // content = $(`<div>${content}</div>`);
-                    console.log(content);
-                    // currentConsoleId = consoleId;
-                    */
                 }
 
 
             },
             'game/clients/+': parts=>{
                 let content = JSON.parse(data);
-                console.log('Commande :', content.action);
+                // console.log('Commande :', content.action);
                 switch (content.action.toLowerCase()) {
                     case 'ping':
                         client.publish(`game/clients/${_clientId}`, JSON.stringify({action:'pong'}), { retain: false, qos: 0 })

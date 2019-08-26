@@ -43,7 +43,7 @@ module.exports = Vue.component('file-editor', {
                 y2: ranges[ranges.length-1].top,
             };
             hljs.highlightBlock(this.$refs.code);
-            var pos1 = document.caretPositionFromPoint(selectionPosition.x1, selectionPosition.y1);
+            var pos1 = document.caretPositionFromPoint(selectionPosition.x1, selectionPosition.y1+1);
             var pos2 = document.caretPositionFromPoint(selectionPosition.x2, selectionPosition.y2);
             //var range = document.createRange();
             var range = document.getSelection().getRangeAt(0);
