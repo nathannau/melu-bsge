@@ -1,7 +1,7 @@
 'use strict';
 
 var $ = require('jquery');
-// var qs = require('querystringify');
+var qs = require('querystringify');
 // var { ApiError, ApiUnauthorizedError, api } = require('./api');
 var mqtt = require('mqtt');
 var clientName = require('../shared/client-name');
@@ -18,13 +18,13 @@ function dispatchMqtt(topic, actions) {
 }
 
 $(function(){
-    console.log('Start !')
+    // console.log('Start !')
     var clientId = clientName.getName({ prefix:'client_' });
-    console.log('clientId : ', clientId);
+    // console.log('clientId : ', clientId);
 
     var client = mqtt.connect(`mqtt://${window.location.hostname}:8883`)
     client.on('connect', function () {
-        console.log('connected');
+        // console.log('connected');
 
         client.subscribe(`game/clients/${clientId}/#`, { }, function(err, granted) { if (err) console.log(err); });
         client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: false, qos: 0 })
@@ -37,7 +37,7 @@ $(function(){
         var _clientId = clientId;
 
         dispatchMqtt(topic, {
-            'game/clients/+/console': parts=>{
+            'game/clients/+/console': async parts=>{
                 if (!data.length) { // Tentative de suppression
                     client.publish(`game/clients/${clientId}`, JSON.stringify({action:'hello'}), { retain: false, qos: 0 })
                     return;
@@ -47,22 +47,55 @@ $(function(){
                     return;
                 }
                 let consoleId = JSON.parse(data);
-                console.log('Afficher console :', consoleId);
-
+                // console.log('Receive console :', consoleId);
+                var search = qs.parse(window.location.search);
+                if (search.console) {
+                    consoleId = search.console;
+                    // console.log('Force console :', consoleId);
+                }
                 currentConsoleId = consoleId;
                 if (consoleId==null) {
                     let content = require('./fullIdentity.html');
                     content = eval('`'+content+'`');
                     $('body').html(content);
                 } else {
-                    // currentConsoleId = consoleId;
+                    var frame = $('<iframe/>')
+                        .attr({src:`/client/${consoleId}/index.html`})
+                        .css({ 
+                            height: '100%', 
+                            width: '100%',
+                            border: 0,
+                            // margin: 0, 
+                            // padding: 0,
+                            display: 'block',
+                        })
+                        .on('load', function() { 
+                            // console.log('iframe onload : ');
+                            var innerDocHead = frame.contents().find('head');
+                            innerDocHead.append(`<script type="text/javascript">
+                                var head = document.head;
+                                var s1 = document.createElement('script');
+                                s1.type = 'text/javascript',
+                                s1.src = 'script.js';
+                                var s2 = document.createElement('script');
+                                s2.type = 'text/javascript',
+                                s2.src = '../melu-mqtt.js';
+                                var c1 = document.createElement('link');
+                                c1.rel = 'stylesheet';
+                                c1.href = 'style.css';
+                                head.appendChild(s1);
+                                head.appendChild(s2);
+                                head.appendChild(c1);
+                            </script>`)
+                        })
+                        .appendTo('body');
                 }
 
 
             },
             'game/clients/+': parts=>{
                 let content = JSON.parse(data);
-                console.log('Commande :', content.action);
+                // console.log('Commande :', content.action);
                 switch (content.action.toLowerCase()) {
                     case 'ping':
                         client.publish(`game/clients/${_clientId}`, JSON.stringify({action:'pong'}), { retain: false, qos: 0 })
